@@ -708,7 +708,7 @@
         activeViewer.classList.remove('open');
         activeViewer.innerHTML = '';
       }
-      viewer.innerHTML = '<iframe src="' + url + '" allowfullscreen></iframe>';
+      viewer.innerHTML = '<iframe src="' + url + '/preview" allowfullscreen></iframe>';
       viewer.classList.add('open');
       activeViewer = viewer;
     }
@@ -730,10 +730,9 @@
             const vid = 'pdf-' + key + '-' + i + '-' + j;
             return '<div class="worksheet-row">' +
               '<span class="ws-name">📄 ' + w.name + '</span>' +
-              '<button class="ws-btn ws-view" onclick="togglePdf(\'' + vid + '\', \'' + w.url + '\')">👁 Voir</button>' +
-              '<a class="ws-btn" style="background:' + d.color + '" href="' + w.url + '" target="_blank">⬇ Télécharger</a>' +
-              '</div>' +
-              '<div class="pdf-viewer" id="' + vid + '"></div>';
+              '<a class="ws-btn ws-view" href="' + w.url + '" target="_blank">👁 Ouvrir</a>' +
+              '<a class="ws-btn" style="background:' + d.color + '" href="' + w.url + '/download" target="_blank">⬇ Télécharger</a>' +
+              '</div>';
           }).join('') +
           '</div>';
       }
