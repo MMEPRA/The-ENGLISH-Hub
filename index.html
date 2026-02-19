@@ -384,7 +384,60 @@
     z-index: 2;
   }
 
-  .seq-magazine-item { position: relative; }
+  .seq-magazine-item { position: relative; overflow: hidden; }
+
+
+  /* STATUS BADGES */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .status-upcoming {
+    background: rgba(136,136,170,0.15);
+    color: var(--muted);
+    border: 1px solid rgba(136,136,170,0.2);
+  }
+
+  .status-ongoing {
+    background: rgba(255,179,71,0.15);
+    color: #FFB347;
+    border: 1px solid rgba(255,179,71,0.3);
+    animation: pulse-ongoing 2s ease-in-out infinite;
+  }
+
+  .status-done {
+    background: rgba(52,211,153,0.15);
+    color: #34D399;
+    border: 1px solid rgba(52,211,153,0.3);
+  }
+
+  @keyframes pulse-ongoing {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,179,71,0.3); }
+    50% { box-shadow: 0 0 0 5px rgba(255,179,71,0); }
+  }
+
+  .mag-status {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
 
   /* MOBILE NAV */
   .mobile-nav {
@@ -599,11 +652,39 @@
       sub: "Equipier polyvalent du commerce",
       color: "#FF6B6B",
       bg: "linear-gradient(135deg, #FF6B6B, #c0392b)",
-      type: "standard",
+      type: "magazine",
       sequences: [
-        { num: "S1", title: "Unit 1 — Healthy ME!", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S2", title: "Unit 2 — What I did", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S3", title: "UNIT 3 — Let's GO Shopping", desc: "À venir — le contenu sera bientôt disponible." }
+        {
+          num: "S1",
+          title: "UNIT 1 — Healthy ME!",
+          desc: "Parler de santé (sport et alimentation) et produire une affiche en anglais simple pour promouvoir un mode de vie sain.",
+          img: "https://nuage08.apps.education.fr/index.php/s/bRmFoSbJKEKnfsQ/preview",
+          emoji: "🥗",
+          date: "2026-02-19",
+          status: "ongoing",
+          worksheets: [
+            { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/nij2XPcFLncJokR" },
+            { name: "Worksheet 2", url: "https://nuage08.apps.education.fr/index.php/s/FFpnRtE744djkCs" },
+            { name: "Worksheet 3", url: "https://nuage08.apps.education.fr/index.php/s/zQSzM46zyRLDwc9" },
+            { name: "Worksheet 4", url: "https://nuage08.apps.education.fr/index.php/s/H6P5EccAcYib4FY" },
+            { name: "Eat a Rainbow", url: "https://nuage08.apps.education.fr/index.php/s/ATw3ynYyMADTs9d" }
+          ],
+          video: "https://nuage08.apps.education.fr/index.php/s/rDqERmNR2KdndNj"
+        },
+        {
+          num: "S2",
+          title: "UNIT 2 — What I Did",
+          desc: "À venir — le contenu sera bientôt disponible.",
+          emoji: "📖",
+          status: "upcoming"
+        },
+        {
+          num: "S3",
+          title: "UNIT 3 — Let's GO Shopping",
+          desc: "À venir — le contenu sera bientôt disponible.",
+          emoji: "🛍️",
+          status: "upcoming"
+        }
       ]
     },
     mbbe: {
@@ -613,9 +694,9 @@
       bg: "linear-gradient(135deg, #FFB347, #e67e22)",
       type: "standard",
       sequences: [
-        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible." }
+        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" }
       ]
     },
     mrc: {
@@ -625,9 +706,9 @@
       bg: "linear-gradient(135deg, #4ECDC4, #16a085)",
       type: "standard",
       sequences: [
-        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible." }
+        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" }
       ]
     },
     agora: {
@@ -643,7 +724,8 @@
           desc: "Découvrir et comparer les systèmes scolaires à travers le monde et comprendre les enjeux liés à l'accès à l'éducation.",
           img: "https://nuage08.apps.education.fr/index.php/s/bDp6mT9LaPPq7Cd/preview",
           emoji: "🏫",
-          date: "2026-02-19"
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S2",
@@ -655,7 +737,8 @@
             { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/B5tLrDz6j3bZMxB" }
           ],
           canva: "https://www.canva.com/design/DAG2mL2zBvw/lEcdkTGOLXhEM9A8xX7kUw/view?embed",
-          date: "2026-02-19"
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S3",
@@ -663,7 +746,8 @@
           desc: "Apprendre à raconter son stage de façon claire, structurée et professionnelle à l'oral.",
           img: "https://nuage08.apps.education.fr/index.php/s/e53ZAT6LEL5okNf/preview",
           emoji: "💼",
-          date: "2026-02-19"
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S4",
@@ -671,7 +755,8 @@
           desc: "Rédiger un post professionnel clair et adapté à une organisation.",
           img: "https://nuage08.apps.education.fr/index.php/s/7SNEK6YRSiLFZWw/preview",
           emoji: "📢",
-          date: "2026-02-19"
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S5",
@@ -680,6 +765,7 @@
           img: "https://nuage08.apps.education.fr/index.php/s/kwQbZ3dX5T46fQH/preview",
           emoji: "🍜",
           date: "2026-02-19",
+          status: "ongoing",
           worksheets: [
             { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/QRmtRnKS5fwmWtg" },
             { name: "Worksheet 2", url: "https://nuage08.apps.education.fr/index.php/s/pSrXAdiGy7WwSdZ" },
@@ -695,13 +781,26 @@
       bg: "linear-gradient(135deg, #34D399, #059669)",
       type: "standard",
       sequences: [
-        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible." }
+        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
+        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" }
       ]
     }
   };
 
+
+
+  function statusBadge(status) {
+    if (status === 'done') return '<span class="status-badge status-done">✅ Terminé</span>';
+    if (status === 'ongoing') return '<span class="status-badge status-ongoing">🟡 En cours</span>';
+    return '<span class="status-badge status-upcoming">⏳ À venir</span>';
+  }
+
+  function statusBadgeMag(status) {
+    if (status === 'done') return '<div class="mag-status status-done">✅ Terminé</div>';
+    if (status === 'ongoing') return '<div class="mag-status status-ongoing">🟡 En cours</div>';
+    return '';
+  }
 
   // Badge NOUVEAU — apparaît 7 jours après la date d'ajout
   function isNew(dateStr) {
@@ -731,7 +830,7 @@
         '<div class="seq-full-header">' +
         '<div class="seq-full-num" style="background:' + d.color + '">' + s.num + '</div>' +
         '<div class="seq-full-title">' + s.title + (isNew(s.date) ? ' <span class="new-badge">🆕 Nouveau</span>' : '') + '</div>' +
-        (!hasWs ? '<span class="coming-soon">À venir</span>' : '') +
+        statusBadge(s.status) +
         '</div>' +
         '<div class="seq-full-desc">' + s.desc + '</div>' +
         wsHtml + '</div>';
@@ -749,6 +848,7 @@
           : '<div class="mag-img-placeholder">' + s.emoji + '</div>';
         return '<div class="seq-magazine-item" onclick="openMagDetail(\'' + d.title.replace(/'/g,"\\'") + '\',' + i + ')">' +
           (isNew(s.date) ? '<div class="mag-new-badge">🆕 Nouveau</div>' : '') +
+          statusBadgeMag(s.status) +
           imgHtml +
           '<div class="mag-body">' +
           '<div class="mag-badge">' + s.num + '</div>' +
@@ -767,6 +867,13 @@
     const d = data[key];
     const s = d.sequences[idx];
     const hasWs = s.worksheets && s.worksheets.length > 0;
+
+    // Video
+    const videoHtml = s.video ?
+      '<div class="mag-detail-ws-title" style="margin-top:20px">🎬 Vidéo</div>' +
+      '<video controls style="width:100%;border-radius:12px;margin-bottom:16px;background:#000;max-height:300px">' +
+      '<source src="' + (s.video ? s.video + '/download' : '') + '" type="video/mp4">' +
+      '</video>' : '';
 
     // Canva presentation
     const canvaHtml = s.canva ? 
@@ -796,6 +903,7 @@
       '</div>' +
       imgHtml +
       '<div class="mag-detail-desc">' + s.desc + '</div>' +
+      videoHtml +
       canvaHtml +
       wsHtml;
     grid.style.display = 'none';
