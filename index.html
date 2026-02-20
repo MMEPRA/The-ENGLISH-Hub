@@ -345,6 +345,41 @@
     opacity: 1;
   }
 
+
+  /* RESOURCES BUTTON */
+  .resources-link {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .resources-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 12px 24px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    backdrop-filter: blur(10px);
+  }
+
+  .resources-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
+
+  .resources-btn span {
+    font-size: 1.2rem;
+  }
+
   /* BADGE NOUVEAU */
   .new-badge {
     display: inline-flex;
@@ -518,6 +553,9 @@
   <div class="welcome-box">
     <span class="welcome-wave">👋</span>
     <p>Hey ! Tout ce dont tu as besoin pour ton anglais est ici. Clique sur ta classe et <strong>let's go !</strong> 🚀</p>
+  </div>
+  <div class="resources-link">
+    <a href="resources.html" class="resources-btn"><span>📚</span> Ressources utiles</a>
   </div>
 </div>
 
