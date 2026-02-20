@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ressources — The English Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cap: #FF6B6B;
+    --mbbe: #FFB347;
+    --mrc: #4ECDC4;
+    --agora: #A78BFA;
+    --bts: #34D399;
+    --dark: #0d0d1a;
+    --card: #16162a;
+    --card2: #1e1e35;
+    --text: #eeeef5;
+    --muted: #8888aa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12; animation: drift 12s ease-in-out infinite; }
+  .orb1 { width: 600px; height: 600px; background: var(--mrc); top: -200px; left: -200px; }
+  .orb2 { width: 500px; height: 500px; background: var(--bts); top: 30%; right: -150px; animation-delay: -4s; }
+  .orb3 { width: 400px; height: 400px; background: var(--mbbe); bottom: -100px; left: 30%; animation-delay: -8s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-30px) scale(1.05); }
+    66% { transform: translate(-20px,20px) scale(0.95); }
+  }
+
+  /* HEADER */
+  .header {
+    position: relative;
+    z-index: 1;
+    padding: 40px 24px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px 18px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .back-btn:hover { background: rgba(255,255,255,0.12); transform: translateX(-3px); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 20px 60px;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 16px;
+    animation: fadeDown 0.8s ease 0.1s both;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, #4ECDC4, #A78BFA, #34D399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+    animation: fadeDown 0.8s ease 0.2s both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CONTENT */
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .resource-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 22px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .resource-card:nth-child(1) { animation-delay: 0.05s; }
+  .resource-card:nth-child(2) { animation-delay: 0.1s; }
+  .resource-card:nth-child(3) { animation-delay: 0.15s; }
+  .resource-card:nth-child(4) { animation-delay: 0.2s; }
+
+  .resource-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .resource-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .resource-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+
+  .resource-level {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .resource-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .resource-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .resource-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-right: 4px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  footer a {
+    color: #A78BFA;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .resources-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div class="header">
+  <a href="index.html" class="back-btn">← Retour au Hub</a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">The English Hub</div>
+  <h1>📚 <span>Ressources</span></h1>
+  <p class="hero-sub">Des sites sélectionnés pour pratiquer et améliorer ton anglais au quotidien.</p>
+</div>
+
+<div class="content">
+
+  <!-- ACTUALITES -->
+  <div class="section-title">🗞️ Sites d'actualités en anglais</div>
+  <div class="resources-grid">
+
+    <a href="https://www.newsinlevels.com" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(255,107,107,0.15)">📰</div>
+        <div>
+          <div class="resource-name" style="color:#FF6B6B">News in Levels</div>
+          <div class="resource-level">⭐ Recommandé — Tous niveaux</div>
+        </div>
+      </div>
+      <div>
+        <span class="tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B">Niveau 1</span>
+        <span class="tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B">Niveau 2</span>
+        <span class="tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B">Niveau 3</span>
+      </div>
+      <div class="resource-desc">Les actualités du monde entier en 3 niveaux de difficulté. Parfait pour progresser à ton rythme avec audio inclus !</div>
+      <span class="resource-btn" style="background:#FF6B6B">Visiter le site →</span>
+    </a>
+
+    <a href="https://www.bbc.co.uk/learningenglish" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(255,179,71,0.15)">🎙️</div>
+        <div>
+          <div class="resource-name" style="color:#FFB347">BBC Learning English</div>
+          <div class="resource-level">CAP • Bac Pro • BTS</div>
+        </div>
+      </div>
+      <div>
+        <span class="tag" style="background:rgba(255,179,71,0.15);color:#FFB347">Audio</span>
+        <span class="tag" style="background:rgba(255,179,71,0.15);color:#FFB347">Vidéo</span>
+        <span class="tag" style="background:rgba(255,179,71,0.15);color:#FFB347">Quiz</span>
+      </div>
+      <div class="resource-desc">Le site officiel de la BBC pour apprendre l'anglais. Actualités, grammaire, vocabulaire et exercices interactifs.</div>
+      <span class="resource-btn" style="background:#FFB347">Visiter le site →</span>
+    </a>
+
+    <a href="https://learningenglish.voanews.com" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(78,205,196,0.15)">🌍</div>
+        <div>
+          <div class="resource-name" style="color:#4ECDC4">VOA Learning English</div>
+          <div class="resource-level">CAP • Bac Pro</div>
+        </div>
+      </div>
+      <div>
+        <span class="tag" style="background:rgba(78,205,196,0.15);color:#4ECDC4">Anglais simplifié</span>
+        <span class="tag" style="background:rgba(78,205,196,0.15);color:#4ECDC4">Audio</span>
+      </div>
+      <div class="resource-desc">La Voix de l'Amérique en anglais simplifié. Idéal pour les débutants — articles courts, lus lentement avec transcription.</div>
+      <span class="resource-btn" style="background:#4ECDC4">Visiter le site →</span>
+    </a>
+
+    <a href="https://www.theguardian.com" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(52,211,153,0.15)">📱</div>
+        <div>
+          <div class="resource-name" style="color:#34D399">The Guardian</div>
+          <div class="resource-level">BTS</div>
+        </div>
+      </div>
+      <div>
+        <span class="tag" style="background:rgba(52,211,153,0.15);color:#34D399">Niveau avancé</span>
+        <span class="tag" style="background:rgba(52,211,153,0.15);color:#34D399">Gratuit</span>
+      </div>
+      <div class="resource-desc">Grand journal britannique en ligne, gratuit et sans pub excessive. Parfait pour les BTS qui veulent lire de l'anglais authentique.</div>
+      <span class="resource-btn" style="background:#34D399">Visiter le site →</span>
+    </a>
+
+  </div>
+
+  <!-- OUTILS -->
+  <div class="section-title">🛠️ Outils pratiques</div>
+  <div class="resources-grid">
+
+    <a href="https://www.wordreference.com/enfr" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(167,139,250,0.15)">📖</div>
+        <div>
+          <div class="resource-name" style="color:#A78BFA">WordReference</div>
+          <div class="resource-level">Dictionnaire EN → FR</div>
+        </div>
+      </div>
+      <div class="resource-desc">Le meilleur dictionnaire anglais-français en ligne. Traductions précises, exemples de phrases et forum de discussion.</div>
+      <span class="resource-btn" style="background:#A78BFA">Visiter le site →</span>
+    </a>
+
+    <a href="https://www.deepl.com" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(255,107,107,0.15)">🤖</div>
+        <div>
+          <div class="resource-name" style="color:#FF6B6B">DeepL</div>
+          <div class="resource-level">Traduction intelligente</div>
+        </div>
+      </div>
+      <div class="resource-desc">Le meilleur outil de traduction automatique. À utiliser avec prudence — pour vérifier, pas pour remplacer ton travail !</div>
+      <span class="resource-btn" style="background:#FF6B6B">Visiter le site →</span>
+    </a>
+
+    <a href="https://www.linguee.fr" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(255,179,71,0.15)">🔍</div>
+        <div>
+          <div class="resource-name" style="color:#FFB347">Linguee</div>
+          <div class="resource-level">Traduction en contexte</div>
+        </div>
+      </div>
+      <div class="resource-desc">Trouve la bonne traduction grâce à des millions d'exemples réels. Très utile pour les expressions et le vocabulaire professionnel.</div>
+      <span class="resource-btn" style="background:#FFB347">Visiter le site →</span>
+    </a>
+
+    <a href="https://www.ef.com/wwen/english-resources/english-grammar" target="_blank" class="resource-card">
+      <div class="resource-top">
+        <div class="resource-icon" style="background:rgba(78,205,196,0.15)">✏️</div>
+        <div>
+          <div class="resource-name" style="color:#4ECDC4">EF Grammar</div>
+          <div class="resource-level">Grammaire anglaise</div>
+        </div>
+      </div>
+      <div class="resource-desc">Guide complet de grammaire anglaise gratuit. Explications claires avec exercices pour réviser les règles essentielles.</div>
+      <span class="resource-btn" style="background:#4ECDC4">Visiter le site →</span>
+    </a>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>← <a href="index.html">Retour à The English Hub</a> · ✨ Sélection de ressources par votre professeur</p>
+</footer>
+
+</body>
+</html>
