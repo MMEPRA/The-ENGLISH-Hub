@@ -704,11 +704,31 @@
       sub: "Métiers de la Relation Client",
       color: "#4ECDC4",
       bg: "linear-gradient(135deg, #4ECDC4, #16a085)",
-      type: "standard",
+      type: "magazine",
       sequences: [
-        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
-        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
-        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" }
+        {
+          num: "S1",
+          title: "UNIT 1",
+          desc: "À compléter bientôt.",
+          emoji: "🛒",
+          date: "2026-02-20",
+          status: "ongoing",
+          canva: "https://www.canva.com/design/DAGyGMvp9wQ/gxwbYRbXWvREbeVqJCfcoA/view?embed"
+        },
+        {
+          num: "S2",
+          title: "UNIT 2",
+          desc: "À venir — le contenu sera bientôt disponible.",
+          emoji: "📋",
+          status: "upcoming"
+        },
+        {
+          num: "S3",
+          title: "UNIT 3",
+          desc: "À venir — le contenu sera bientôt disponible.",
+          emoji: "📋",
+          status: "upcoming"
+        }
       ]
     },
     agora: {
@@ -779,11 +799,41 @@
       sub: "Métiers de l'Esthétique-Cosmétique-Parfumerie",
       color: "#34D399",
       bg: "linear-gradient(135deg, #34D399, #059669)",
-      type: "standard",
+      type: "magazine",
       sequences: [
-        { num: "S1", title: "Séquence 1", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
-        { num: "S2", title: "Séquence 2", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" },
-        { num: "S3", title: "Séquence 3", desc: "À venir — le contenu sera bientôt disponible.", status: "upcoming" }
+        {
+          num: "S1",
+          title: "UNIT 1 — Becoming a Beauty Professional",
+          desc: "À compléter bientôt.",
+          img: "https://nuage08.apps.education.fr/index.php/s/Cg67CrTCNpfNCJk/preview",
+          emoji: "💄",
+          date: "2026-02-20",
+          status: "done",
+          canva: "https://www.canva.com/design/DAGzCTCtzBQ/4jHIQbV6ji9kViYevi-KcQ/view?embed",
+          folder: "https://nuage08.apps.education.fr/index.php/s/a5zDe4ZwMQDmMmX"
+        },
+        {
+          num: "S2",
+          title: "UNIT 2 — Skincare and Product Expertise",
+          desc: "Permettre de conseiller une routine de soins adaptés à un profil client en justifiant leur choix à l'oral avec un vocabulaire professionnel précis.",
+          img: "https://nuage08.apps.education.fr/index.php/s/8q7SH3JbbrCsJXK/preview",
+          emoji: "🧴",
+          date: "2026-02-20",
+          status: "done",
+          canva: "https://www.canva.com/design/DAG3R74_HUc/s0W2H2ytziIt4u1Ya6smsQ/view?embed",
+          folder: "https://nuage08.apps.education.fr/index.php/s/gxri5LeKkktPYyB"
+        },
+        {
+          num: "S3",
+          title: "UNIT 3 — Digital Beauty",
+          desc: "À compléter bientôt.",
+          img: "https://nuage08.apps.education.fr/index.php/s/eEkcsTW5xkoWCdC/preview",
+          emoji: "📱",
+          date: "2026-02-20",
+          status: "ongoing",
+          canva: "https://www.canva.com/design/DAG9pFnfud0/hqccq6FAZVpDiITjjUg8Jg/view?embed",
+          folder: "https://nuage08.apps.education.fr/index.php/s/EmHHtWd98yx3TEK"
+        }
       ]
     }
   };
@@ -882,6 +932,11 @@
       '<iframe loading="lazy" style="position:absolute;width:100%;height:100%;top:0;left:0;border:none" src="' + s.canva + '" allowfullscreen></iframe>' +
       '</div>' : '';
 
+    // Folder link
+    const folderHtml = s.folder ?
+      '<div class="mag-detail-ws-title" style="margin-top:20px">📁 Documents</div>' +
+      '<a href="' + s.folder + '" target="_blank" class="ws-btn" style="background:' + d.color + ';margin-bottom:16px;display:inline-flex">📁 Accéder à tous les documents</a>' : '';
+
     const wsHtml = hasWs ? '<div class="mag-detail-ws-title">📄 Documents</div>' +
       '<div class="mag-ws-list">' +
       s.worksheets.map(function(w) {
@@ -905,6 +960,7 @@
       '<div class="mag-detail-desc">' + s.desc + '</div>' +
       videoHtml +
       canvaHtml +
+      folderHtml +
       wsHtml;
     grid.style.display = 'none';
     detail.classList.add('open');
