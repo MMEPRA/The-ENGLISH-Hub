@@ -318,30 +318,29 @@
   }
 
   /* RESOURCES BUTTON */
-  .resources-link { position: relative; z-index: 1; text-align: center; margin-bottom: 48px; }
+  .resources-link { position: relative; z-index: 1; text-align: center; margin-bottom: 40px; margin-top: 12px; }
   .resources-btn {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 14px;
-    padding: 12px 28px;
-    color: var(--text) !important;
+    gap: 8px;
+    background: rgba(167,139,250,0.1);
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 30px;
+    padding: 8px 20px;
+    color: var(--muted) !important;
     text-decoration: none !important;
     font-weight: 700;
-    font-size: 15px;
-    transition: background 0.2s, transform 0.2s, border-color 0.2s;
-    backdrop-filter: blur(10px);
+    font-size: 13px;
+    transition: background 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
   }
   .resources-btn:hover {
-    background: rgba(255,255,255,0.13);
-    border-color: rgba(255,255,255,0.25);
+    background: rgba(167,139,250,0.2);
+    border-color: rgba(167,139,250,0.5);
     transform: translateY(-2px);
-    color: white !important;
+    color: #A78BFA !important;
     text-decoration: none !important;
   }
-  .resources-btn span { font-size: 1.2rem; }
+  .resources-btn span { font-size: 1rem; }
 
 </style>
 </head>
@@ -463,9 +462,9 @@
       <div class="card-title">BTS MECP</div>
       <div class="card-full">Métiers de l'Esthétique-Cosmétique-Parfumerie</div>
       <div class="card-sequences">
-        <div class="seq-item"><div class="seq-dot"></div> Unit 1 - Becoming a Beauty Professionnal <span class="seq-num">S1</span></div>
-        <div class="seq-item"><div class="seq-dot"></div> UNIT 2 — Skincare and Product Expertise <span class="seq-num">S2</span></div>
-        <div class="seq-item"><div class="seq-dot"></div> UNIT 3 — Digital Beauty <span class="seq-num">S3</span></div>
+        <div class="seq-item"><div class="seq-dot"></div> Séquence 1 — À venir <span class="seq-num">S1</span></div>
+        <div class="seq-item"><div class="seq-dot"></div> Séquence 2 — À venir <span class="seq-num">S2</span></div>
+        <div class="seq-item"><div class="seq-dot"></div> Séquence 3 — À venir <span class="seq-num">S3</span></div>
       </div>
     </div>
     <div class="card-footer">
@@ -503,11 +502,27 @@
       sub: "Equipier polyvalent du commerce",
       color: "#FF6B6B",
       bg: "linear-gradient(135deg, #FF6B6B, #c0392b)",
-      type: "standard",
+      type: "magazine",
       sequences: [
-        { num: "S1", title: "Unit 1 — Healthy ME!", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S2", title: "Unit 2 — What I did", desc: "À venir — le contenu sera bientôt disponible." },
-        { num: "S3", title: "UNIT 3 — Let's GO Shopping", desc: "À venir — le contenu sera bientôt disponible." }
+        {
+          num: "S1",
+          title: "UNIT 1 — Healthy ME!",
+          desc: "Parler de santé (sport et alimentation) et produire une affiche en anglais simple pour promouvoir un mode de vie sain.",
+          img: "https://nuage08.apps.education.fr/index.php/s/bRmFoSbJKEKnfsQ/preview",
+          emoji: "🥗",
+          date: "2026-02-20",
+          status: "ongoing",
+          worksheets: [
+            { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/nij2XPcFLncJokR" },
+            { name: "Worksheet 2", url: "https://nuage08.apps.education.fr/index.php/s/FFpnRtE744djkCs" },
+            { name: "Worksheet 3", url: "https://nuage08.apps.education.fr/index.php/s/zQSzM46zyRLDwc9" },
+            { name: "Worksheet 4", url: "https://nuage08.apps.education.fr/index.php/s/H6P5EccAcYib4FY" },
+            { name: "Eat a Rainbow", url: "https://nuage08.apps.education.fr/index.php/s/ATw3ynYyMADTs9d" }
+          ],
+          video: "https://nuage08.apps.education.fr/index.php/s/rDqERmNR2KdndNj"
+        },
+        { num: "S2", title: "UNIT 2 — What I Did", desc: "À venir — le contenu sera bientôt disponible.", emoji: "📖", status: "upcoming" },
+        { num: "S3", title: "UNIT 3 — Let's GO Shopping", desc: "À venir — le contenu sera bientôt disponible.", emoji: "🛍️", status: "upcoming" }
       ]
     },
     mbbe: {
@@ -554,28 +569,40 @@
           title: "UNIT 1 — Schools Around the World",
           desc: "Découvrir et comparer les systèmes scolaires à travers le monde et comprendre les enjeux liés à l'accès à l'éducation.",
           img: "https://nuage08.apps.education.fr/index.php/s/bDp6mT9LaPPq7Cd/preview",
-          emoji: "🏫"
+          emoji: "🏫",
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S2",
           title: "UNIT 2 — From Bombay to L.A.",
           desc: "Comprendre comment le rap, de Los Angeles à l'Inde, exprime l'identité, les valeurs et l'authenticité à travers des voix engagées.",
           img: "https://nuage08.apps.education.fr/index.php/s/AP5LzonDZQdpqZr/preview",
-          emoji: "🎵"
+          emoji: "🎵",
+          date: "2026-02-19",
+          status: "done",
+          worksheets: [
+            { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/B5tLrDz6j3bZMxB" }
+          ],
+          canva: "https://www.canva.com/design/DAG2mL2zBvw/lEcdkTGOLXhEM9A8xX7kUw/view?embed"
         },
         {
           num: "S3",
           title: "UNIT 3 — My Internship",
           desc: "Apprendre à raconter son stage de façon claire, structurée et professionnelle à l'oral.",
           img: "https://nuage08.apps.education.fr/index.php/s/e53ZAT6LEL5okNf/preview",
-          emoji: "💼"
+          emoji: "💼",
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S4",
           title: "UNIT 4 — Make It Public!",
           desc: "Rédiger un post professionnel clair et adapté à une organisation.",
           img: "https://nuage08.apps.education.fr/index.php/s/7SNEK6YRSiLFZWw/preview",
-          emoji: "📢"
+          emoji: "📢",
+          date: "2026-02-19",
+          status: "done"
         },
         {
           num: "S5",
@@ -583,6 +610,8 @@
           desc: "Comprendre comment la street food reflète l'histoire, la culture et l'économie d'un pays afin de réinvestir ces connaissances dans la création d'un projet de food truck inspiré de différentes traditions.",
           img: "https://nuage08.apps.education.fr/index.php/s/kwQbZ3dX5T46fQH/preview",
           emoji: "🍜",
+          date: "2026-02-19",
+          status: "ongoing",
           worksheets: [
             { name: "Worksheet 1", url: "https://nuage08.apps.education.fr/index.php/s/QRmtRnKS5fwmWtg" },
             { name: "Worksheet 2", url: "https://nuage08.apps.education.fr/index.php/s/pSrXAdiGy7WwSdZ" },
@@ -601,7 +630,7 @@
         {
           num: "S1",
           title: "UNIT 1 — Becoming a Beauty Professional",
-          desc: "Découvrir les métiers du secteur de la beauté et apprendre à présenter son projet professionnel en anglais de manière claire et adaptée à un contexte d’entretien.",
+          desc: "À compléter bientôt.",
           img: "https://nuage08.apps.education.fr/index.php/s/Cg67CrTCNpfNCJk/preview",
           emoji: "💄",
           date: "2026-02-20",
@@ -612,7 +641,7 @@
         {
           num: "S2",
           title: "UNIT 2 — Skincare and Product Expertise",
-          desc: "Permettre de conseiller une routine de soins adaptée à un profil client en justifiant leur choix à l'oral avec un vocabulaire professionnel précis.",
+          desc: "Permettre de conseiller une routine de soins adaptés à un profil client en justifiant leur choix à l'oral avec un vocabulaire professionnel précis.",
           img: "https://nuage08.apps.education.fr/index.php/s/8q7SH3JbbrCsJXK/preview",
           emoji: "🧴",
           date: "2026-02-20",
@@ -623,17 +652,35 @@
         {
           num: "S3",
           title: "UNIT 3 — Digital Beauty",
-          desc: "Analyser des campagnes digitales beauté afin de comprendre l’impact du message et de la stratégie social media sur l’image et la réputation d’une marque.",
+          desc: "À compléter bientôt.",
           img: "https://nuage08.apps.education.fr/index.php/s/eEkcsTW5xkoWCdC/preview",
           emoji: "📱",
           date: "2026-02-20",
-          status: "ongoing",
+          status: "done",
           canva: "https://www.canva.com/design/DAG9pFnfud0/hqccq6FAZVpDiITjjUg8Jg/view?embed",
           folder: "https://nuage08.apps.education.fr/index.php/s/EmHHtWd98yx3TEK"
         }
       ]
     }
   };
+
+
+  function statusBadge(status) {
+    if (status === 'done') return '<span class="status-badge status-done">✅ Terminé</span>';
+    if (status === 'ongoing') return '<span class="status-badge status-ongoing">🟡 En cours</span>';
+    return '<span class="status-badge status-upcoming">⏳ À venir</span>';
+  }
+  function statusBadgeMag(status) {
+    if (status === 'done') return '<div class="mag-status status-done">✅ Terminé</div>';
+    if (status === 'ongoing') return '<div class="mag-status status-ongoing">🟡 En cours</div>';
+    return '';
+  }
+  function isNew(dateStr) {
+    if (!dateStr) return false;
+    const added = new Date(dateStr);
+    const now = new Date();
+    return (now - added) / (1000*60*60*24) <= 7;
+  }
 
   // ---- STANDARD MODE ----
   function renderStandard(d) {
@@ -653,8 +700,8 @@
       return '<div class="seq-full-item">' +
         '<div class="seq-full-header">' +
         '<div class="seq-full-num" style="background:' + d.color + '">' + s.num + '</div>' +
-        '<div class="seq-full-title">' + s.title + '</div>' +
-        (!hasWs ? '<span class="coming-soon">À venir</span>' : '') +
+        '<div class="seq-full-title">' + s.title + (isNew(s.date) ? ' <span class="new-badge">🆕 Nouveau</span>' : '') + '</div>' +
+        statusBadge(s.status) +
         '</div>' +
         '<div class="seq-full-desc">' + s.desc + '</div>' +
         wsHtml + '</div>';
@@ -671,6 +718,8 @@
             '<div class="mag-img-placeholder" style="display:none">' + s.emoji + '</div>'
           : '<div class="mag-img-placeholder">' + s.emoji + '</div>';
         return '<div class="seq-magazine-item" onclick="openMagDetail(\'' + d.title.replace(/'/g,"\\'") + '\',' + i + ')">' +
+          (isNew(s.date) ? '<div class="mag-new-badge">🆕 Nouveau</div>' : '') +
+          statusBadgeMag(s.status) +
           imgHtml +
           '<div class="mag-body">' +
           '<div class="mag-badge">' + s.num + '</div>' +
@@ -717,7 +766,7 @@
           '<a class="ws-btn ws-view" href="' + w.url + '" target="_blank">👁 Ouvrir</a>' +
           '<a class="ws-btn" style="background:' + d.color + '" href="' + w.url + '/download" target="_blank">⬇ Télécharger</a>' +
           '</div>';
-      }).join('') + '</div>' : '<p style="color:var(--muted);font-size:13px">Les documents seront bientôt disponibles.</p>';
+      }).join('') + '</div>' : (s.folder ? '' : '<p style="color:var(--muted);font-size:13px">Les documents seront bientôt disponibles.</p>');
 
     const imgHtml = s.img ? '<img class="mag-detail-img" src="' + s.img + '" alt="' + s.title + '" onerror="this.style.display=\'none\'">' : '';
 
@@ -776,26 +825,8 @@
     el.classList.add('active');
   }
 
-  // ---- TYPING EFFECT ----
+  // ---- SCROLL REVEAL ----
   window.addEventListener('load', function() {
-    const welcomeP = document.querySelector('.welcome-box p');
-    if (welcomeP) {
-      const fullText = "Hey ! Tout ce dont tu as besoin pour ton anglais est ici. Clique sur ta classe et ";
-      let i = 0;
-      welcomeP.innerHTML = '';
-      function type() {
-        if (i < fullText.length) {
-          welcomeP.innerHTML = fullText.substring(0, i + 1);
-          i++;
-          setTimeout(type, 28);
-        } else {
-          welcomeP.innerHTML += '<strong>let\'s go !</strong> 🚀';
-        }
-      }
-      setTimeout(type, 600);
-    }
-
-    // ---- SCROLL REVEAL ----
     function revealCards() {
       document.querySelectorAll('.class-card').forEach(function(card, i) {
         const rect = card.getBoundingClientRect();
