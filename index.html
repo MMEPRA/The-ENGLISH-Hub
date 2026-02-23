@@ -569,7 +569,7 @@
         {
           num: "U2",
           title: "UNIT 2 — Your SKILLS Your JOB",
-          desc: "À venir — le contenu sera bientôt disponible.",
+          desc: "How can I present and describe a job linked to my skills and training?",
           img: "https://nuage08.apps.education.fr/index.php/s/Egfz3P2qSnWxYzk/preview",
           emoji: "💼",
           date: "2026-02-23",
@@ -597,7 +597,7 @@
           emoji: "⭐",
           date: "2026-02-23",
           status: "upcoming",
-          folder: "https://nuage08.apps.education.fr/index.php/s/PESaPTLa8k4jAMi"
+          folder: "https://nuage08.apps.education.fr/index.php/s/qxore83yedHLKTZ"
         }
       ]
     },
@@ -633,7 +633,7 @@
         {
           num: "U2",
           title: "UNIT 2 — Your SKILLS Your JOB",
-          desc: "À venir — le contenu sera bientôt disponible.",
+          desc: "How can I present and describe a job linked to my skills and training?",
           img: "https://nuage08.apps.education.fr/index.php/s/Egfz3P2qSnWxYzk/preview",
           emoji: "💼",
           date: "2026-02-23",
@@ -664,7 +664,7 @@
           emoji: "⭐",
           date: "2026-02-23",
           status: "upcoming",
-          folder: "https://nuage08.apps.education.fr/index.php/s/PESaPTLa8k4jAMi"
+          folder: "https://nuage08.apps.education.fr/index.php/s/qxore83yedHLKTZ"
         },
         {
           num: "U5",
@@ -825,7 +825,7 @@
       return '<div class="seq-full-item">' +
         '<div class="seq-full-header">' +
         '<div class="seq-full-num" style="background:' + d.color + '">' + s.num + '</div>' +
-        '<div class="seq-full-title">' + s.title + (isNew(s.date) ? ' <span class="new-badge">🆕 Nouveau</span>' : '') + '</div>' +
+        '<div class="seq-full-title">' + s.title + '</div>' +
         '</div>' +
         '<div class="seq-full-desc">' + s.desc + '</div>' +
         wsHtml + '</div>';
@@ -842,14 +842,14 @@
             '<div class="mag-img-placeholder" style="display:none">' + s.emoji + '</div>'
           : '<div class="mag-img-placeholder">' + s.emoji + '</div>';
         return '<div class="seq-magazine-item" onclick="openMagDetail(\'' + d.title.replace(/'/g,"\\'") + '\',' + i + ')">' +
-          (isNew(s.date) ? '<div class="mag-new-badge">🆕 Nouveau</div>' : '') +
+          
           imgHtml +
           '<div class="mag-body">' +
           '<div class="mag-badge">' + s.num + '</div>' +
           '<div class="mag-title">' + s.title + '</div>' +
-          '<div class="mag-desc">' + s.desc.substring(0, 80) + (s.desc.length > 80 ? '...' : '') + '</div>' +
+          '<div class="mag-desc">' + (s.desc && s.desc !== 'À venir — le contenu sera bientôt disponible.' ? s.desc.substring(0, 80) + (s.desc.length > 80 ? '...' : '') : '') + '</div>' +
           '<div class="mag-footer">' +
-          '<span class="mag-ws-count">' + (wsCount > 0 ? '📄 ' + wsCount + ' worksheet' + (wsCount > 1 ? 's' : '') : '⏳ À venir') + '</span>' +
+          '<span class="mag-ws-count">' + (wsCount > 0 ? '📄 ' + wsCount + ' worksheet' + (wsCount > 1 ? 's' : '') : '') + '</span>' +
           '<span class="mag-cta">Voir →</span>' +
           '</div></div></div>';
       }).join('') + '</div>';
