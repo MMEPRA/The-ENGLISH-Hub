@@ -248,18 +248,19 @@
   }
 
   .back-brand {
-    color: #00e5d8;
+    color: #ff8800;
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.5px;
-    animation: brandPulse 2.4s ease-in-out infinite;
+    animation: brandPulseWarm 2.4s ease-in-out infinite;
   }
-  @keyframes brandPulse {
-    0%   { color: #00e5d8; text-shadow: 0 0 6px rgba(0,229,216,0.3); }
-    50%  { color: #7ffff4; text-shadow: 0 0 18px rgba(0,229,216,0.7); }
-    100% { color: #00e5d8; text-shadow: 0 0 6px rgba(0,229,216,0.3); }
+  @keyframes brandPulseWarm {
+    0%   { color: #ff6600; text-shadow: 0 0 6px rgba(255,100,0,0.3); }
+    50%  { color: #ffaa00; text-shadow: 0 0 18px rgba(255,160,0,0.8); }
+    100% { color: #ff6600; text-shadow: 0 0 6px rgba(255,100,0,0.3); }
   }
-  .back-btn svg { color: #00e5d8; }
+  }
+  .back-btn svg { color: #ff8800; }
 
   /* ── OPTION B: colored top border on cards ── */
   .card[data-c="play"] {
@@ -330,20 +331,35 @@
     transform: translateY(0);
   }
 
-  /* ── CONFETTI ── */
-  .confetti-piece {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    pointer-events: none;
-    z-index: 9999;
-    animation: confettiFall var(--dur) ease forwards;
+
+
+  /* ── PLAY CARDS: glow pulse ── */
+  .card[data-c="play"] { position: relative; }
+  .card[data-c="play"]:hover {
+    border-color: rgba(255,59,59,0.6) !important;
+    box-shadow: 0 0 20px rgba(255,80,0,0.25), inset 0 0 30px rgba(255,60,0,0.08);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
-  @keyframes confettiFall {
-    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-    80%  { opacity: 0.8; }
-    100% { transform: translateY(var(--fy)) translateX(var(--fx)) rotate(720deg) scale(0.3); opacity: 0; }
+
+  /* ── WARM HALO EXPLORE ── */
+  header { position: relative; overflow: hidden; }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -60px;
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(255,100,0,0.13) 0%, rgba(255,50,0,0.06) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -40px;
+    width: 400px; height: 300px;
+    background: radial-gradient(ellipse, rgba(255,160,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
   }
 </style>
 </head>
@@ -583,40 +599,40 @@
     } catch(e) {}
   }
 
-  // CONFETTI on Play cards only
-  function launchConfetti(e) {
-    var colors = ['#ff3b3b','#ff8c00','#ffd700','#ff5500','#fff','#ffb347'];
-    var x = e.clientX || window.innerWidth / 2;
-    var y = e.clientY || window.innerHeight / 2;
-    for (var i = 0; i < 22; i++) {
-      (function(i) {
-        setTimeout(function() {
-          var c = document.createElement('div');
-          c.className = 'confetti-piece';
-          c.style.cssText = [
-            'left:' + x + 'px',
-            'top:' + y + 'px',
+  // ARCADE SPARKS on Play cards hover
+  document.querySelectorAll('.card[data-c="play"]').forEach(function(card) {
+    var sparkInterval = null;
+    card.addEventListener('mouseenter', function() {
+      sparkInterval = setInterval(function() {
+        for (var i = 0; i < 3; i++) {
+          var s = document.createElement('div');
+          s.className = 'arcade-spark';
+          var size = 3 + Math.random() * 7;
+          var colors = ['#fff','#ffdd00','#ff5500','#ff9900','#ffaaaa','#ffffaa'];
+          s.style.cssText = [
+            'width:' + size + 'px',
+            'height:' + size + 'px',
+            'left:' + (Math.random() * 100) + '%',
+            'top:' + (Math.random() * 100) + '%',
             'background:' + colors[Math.floor(Math.random()*colors.length)],
-            '--fx:' + (Math.random()*160-80) + 'px',
-            '--fy:' + (80 + Math.random()*120) + 'px',
-            '--dur:' + (0.7 + Math.random()*0.6) + 's',
-            'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
-            'width:' + (5 + Math.random()*6) + 'px',
-            'height:' + (5 + Math.random()*6) + 'px'
+            'box-shadow: 0 0 ' + (size*2) + 'px ' + colors[Math.floor(Math.random()*colors.length)],
+            '--dur:' + (0.3 + Math.random()*0.5) + 's'
           ].join(';');
-          document.body.appendChild(c);
-          setTimeout(function() { c.remove(); }, 1400);
-        }, i * 30);
-      })(i);
-    }
-  }
+          card.appendChild(s);
+          setTimeout(function() { s.remove(); }, 800);
+        }
+      }, 120);
+    });
+    card.addEventListener('mouseleave', function() {
+      clearInterval(sparkInterval);
+    });
+  });
 
   document.querySelectorAll('.card').forEach(function(card) {
     card.addEventListener('click', playPop);
-    if (card.getAttribute('data-c') === 'play') {
-      card.addEventListener('click', launchConfetti);
-    }
   });
+
+
 </script>
 </body>
 </html>
