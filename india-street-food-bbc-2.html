@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Street Food in India – BBC News</title>
+  <link href="https://fonts.googleapis.com/css2?family=Reith+Sans:wght@400;700&family=BBC+Reith+Serif&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bbc-red: #BB1919;
+      --bbc-dark: #1a1a1a;
+      --bbc-grey: #3F3F42;
+      --bbc-light-grey: #F6F6F6;
+      --bbc-border: #CCCCCC;
+      --bbc-blue: #2B6CB0;
+      --bbc-nav-bg: #1a1a1a;
+      --text: #1a1a1a;
+      --body-font: 'Georgia', serif;
+      --ui-font: 'Arial', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      font-family: var(--body-font);
+      background: #fff;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── TOP NAV ── */
+    .bbc-top-bar {
+      background: var(--bbc-nav-bg);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      height: 48px;
+    }
+    .bbc-logo {
+      display: flex;
+      gap: 3px;
+    }
+    .bbc-logo span {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      color: #000;
+      font-weight: 900;
+      font-size: 18px;
+      font-family: var(--ui-font);
+      text-align: center;
+      line-height: 28px;
+    }
+    .bbc-nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+      height: 100%;
+    }
+    .bbc-nav-links li a {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 14px;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--ui-font);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .bbc-nav-links li a:hover { border-bottom-color: #fff; }
+    .bbc-nav-links li.active a { border-bottom-color: var(--bbc-red); }
+    .bbc-nav-links li a.news-red { color: #FF6B6B; }
+
+    /* ── SECTION LABEL ── */
+    .section-nav {
+      background: var(--bbc-red);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      height: 36px;
+    }
+    .section-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--ui-font);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrapper {
+      max-width: 976px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ── ARTICLE HEADER ── */
+    .article-header {
+      padding: 24px 0 0;
+      border-top: 4px solid var(--bbc-dark);
+      margin-top: 16px;
+    }
+    .article-tag {
+      display: inline-block;
+      background: var(--bbc-red);
+      color: #fff;
+      font-family: var(--ui-font);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .article-title {
+      font-family: var(--ui-font);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--bbc-dark);
+      margin-bottom: 12px;
+      max-width: 700px;
+    }
+    .article-standfirst {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--bbc-grey);
+      max-width: 620px;
+      margin-bottom: 20px;
+      font-family: var(--ui-font);
+      line-height: 1.5;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+      border-top: 1px solid var(--bbc-border);
+      border-bottom: 1px solid var(--bbc-border);
+      margin-bottom: 0;
+      font-family: var(--ui-font);
+      font-size: 13px;
+      color: var(--bbc-grey);
+    }
+    .article-meta strong { color: var(--bbc-dark); }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .share-btn {
+      border: none;
+      border-radius: 2px;
+      padding: 5px 12px;
+      font-family: var(--ui-font);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+    }
+    .share-btn.twitter { background: #1da1f2; }
+    .share-btn.facebook { background: #1877f2; }
+
+    /* ── CONTENT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 32px;
+      margin-top: 0;
+    }
+    .article-body { min-width: 0; }
+
+    /* ── HERO IMAGE ── */
+    .hero-figure {
+      margin: 0 0 0;
+    }
+    .hero-figure img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-figure figcaption {
+      background: var(--bbc-light-grey);
+      padding: 8px 12px;
+      font-family: var(--ui-font);
+      font-size: 12px;
+      color: var(--bbc-grey);
+      border-left: 3px solid var(--bbc-red);
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .section-block {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--bbc-border);
+    }
+    .section-block:last-of-type { border-bottom: none; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-number {
+      background: var(--bbc-dark);
+      color: #fff;
+      font-family: var(--ui-font);
+      font-size: 11px;
+      font-weight: 700;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-subtitle {
+      font-family: var(--ui-font);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--bbc-dark);
+      line-height: 1.2;
+    }
+
+    .section-body p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #1a1a1a;
+      margin-bottom: 14px;
+    }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    /* ── INLINE IMAGE ── */
+    .inline-figure {
+      float: right;
+      margin: 0 0 16px 24px;
+      width: 260px;
+    }
+    .inline-figure img {
+      width: 100%;
+      height: 175px;
+      object-fit: cover;
+      display: block;
+    }
+    .inline-figure figcaption {
+      font-family: var(--ui-font);
+      font-size: 11px;
+      color: var(--bbc-grey);
+      padding: 6px 0;
+      border-top: 2px solid var(--bbc-red);
+    }
+    .clearfix::after { content: ''; display: table; clear: both; }
+
+    /* ── PULLQUOTE ── */
+    .pullquote {
+      border-left: 4px solid var(--bbc-red);
+      margin: 20px 0;
+      padding: 12px 16px;
+      background: var(--bbc-light-grey);
+      font-family: var(--ui-font);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--bbc-dark);
+      line-height: 1.4;
+    }
+
+    /* ── KEY WORDS BOX ── */
+    .vocab-box {
+      border: 2px solid var(--bbc-dark);
+      margin: 20px 0 0;
+      padding: 16px;
+      background: #fff;
+    }
+    .vocab-box h3 {
+      font-family: var(--ui-font);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--bbc-red);
+      margin-bottom: 10px;
+    }
+    .vocab-list {
+      list-style: none;
+    }
+    .vocab-list li {
+      font-family: var(--ui-font);
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bbc-border);
+      color: var(--bbc-grey);
+    }
+    .vocab-list li:last-child { border-bottom: none; }
+    .vocab-list li strong {
+      color: var(--bbc-dark);
+      font-weight: 700;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar { padding-top: 0; }
+    .sidebar-widget {
+      border-top: 4px solid var(--bbc-dark);
+      padding: 16px 0;
+      margin-bottom: 24px;
+    }
+    .sidebar-widget h2 {
+      font-family: var(--ui-font);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--bbc-dark);
+      margin-bottom: 14px;
+    }
+
+    /* ── QUIZ ── */
+    .quiz-question {
+      font-family: var(--ui-font);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--bbc-dark);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .quiz-options { list-style: none; margin-bottom: 16px; }
+    .quiz-options li {
+      margin-bottom: 6px;
+    }
+    .quiz-options label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-family: var(--ui-font);
+      font-size: 13px;
+      color: var(--bbc-grey);
+      cursor: pointer;
+      line-height: 1.4;
+    }
+    .quiz-options input[type="radio"] {
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--bbc-red);
+    }
+    .quiz-feedback {
+      font-family: var(--ui-font);
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 2px;
+      display: none;
+      margin-bottom: 16px;
+    }
+    .quiz-feedback.correct { background: #e6f4ea; color: #1a6b2a; border-left: 3px solid #1a6b2a; }
+    .quiz-feedback.wrong { background: #fdecea; color: #b91c1c; border-left: 3px solid #b91c1c; }
+
+    .btn-check {
+      background: var(--bbc-red);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-family: var(--ui-font);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .btn-check:hover { background: #9b0000; }
+    .quiz-score {
+      display: none;
+      font-family: var(--ui-font);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      padding: 12px;
+      background: var(--bbc-dark);
+      color: #fff;
+      margin-top: 12px;
+    }
+
+    /* ── RELATED TOPICS ── */
+    .topic-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .topic-tag {
+      border: 1px solid var(--bbc-border);
+      padding: 5px 10px;
+      font-family: var(--ui-font);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--bbc-dark);
+      text-decoration: none;
+      background: #fff;
+      transition: background 0.15s;
+    }
+    .topic-tag:hover { background: var(--bbc-light-grey); }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--bbc-dark);
+      color: #aaa;
+      font-family: var(--ui-font);
+      font-size: 12px;
+      padding: 24px 16px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .page-footer .bbc-logo { justify-content: center; margin-bottom: 10px; }
+    .page-footer p { margin-top: 8px; }
+    .edu-badge {
+      display: inline-block;
+      background: var(--bbc-red);
+      color: #fff;
+      font-family: var(--ui-font);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .inline-figure { float: none; width: 100%; margin: 0 0 16px 0; }
+      .article-title { font-size: 1.5rem; }
+      .bbc-nav-links { display: none; }
+      .hero-figure img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="bbc-top-bar">
+  <div class="bbc-logo">
+    <span>B</span><span>B</span><span>C</span>
+  </div>
+  <ul class="bbc-nav-links">
+    <li><a href="#">Home</a></li>
+    <li class="active"><a href="#" class="news-red">News</a></li>
+    <li><a href="#">Sport</a></li>
+    <li><a href="#">Culture</a></li>
+    <li><a href="#">Travel</a></li>
+    <li><a href="#">Education</a></li>
+  </ul>
+</nav>
+
+<div class="section-nav">
+  <a href="#">World &rsaquo; Asia &rsaquo; India</a>
+</div>
+
+<div class="page-wrapper">
+  <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap;">
+
+    <!-- MAIN CONTENT -->
+    <div style="flex:1; min-width:280px;">
+
+      <!-- ARTICLE HEADER -->
+      <header class="article-header">
+        <div class="article-tag">Feature</div>
+        <h1 class="article-title">Street Food in India: A Way of Life on Every Corner</h1>
+        <p class="article-standfirst">How millions of Indians eat, work, and socialise around food carts and street stalls every single day.</p>
+        <div class="article-meta">
+          <span><strong>BBC News</strong></span>
+          <span>17 February 2026</span>
+          <span>🕐 5 min read</span>
+          <div class="share-row">
+            <button class="share-btn twitter">Twitter</button>
+            <button class="share-btn facebook">Facebook</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- HERO IMAGE -->
+      <figure class="hero-figure">
+        <img
+          src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=900&auto=format&fit=crop"
+          alt="A busy street food market in India at dusk"
+          onerror="this.src='https://images.unsplash.com/photo-1512058564366-18510be2db19?w=900&auto=format&fit=crop'"
+        />
+        <figcaption>Street food vendors serve millions of customers across Indian cities every day — Getty Images</figcaption>
+      </figure>
+
+      <!-- SECTION 1 -->
+      <article class="section-block" id="section1">
+        <div class="section-label">
+          <div class="section-number">1</div>
+          <h2 class="section-subtitle">Where and When People Eat</h2>
+        </div>
+        <div class="section-body clearfix">
+          <figure class="inline-figure">
+            <img
+              src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&auto=format&fit=crop"
+              alt="Street food stall at night in India"
+              onerror="this.src='https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&auto=format&fit=crop'"
+            />
+            <figcaption>Evening stalls are the busiest of the day</figcaption>
+          </figure>
+          <p>Street food is everywhere in Indian cities. In Mumbai, Delhi, Bangalore, and Kolkata, food vendors work on street corners, near train stations, and outside colleges. Some vendors have small carts with wheels. Others cook at the same spot every day for many years.</p>
+          <p>People eat street food at different times. In the morning, workers stop for a quick breakfast before their jobs start. At lunchtime, office workers buy food from stalls near their buildings. The busiest time is evening, between 6pm and 9pm, when everyone finishes work. Late at night, young people meet at food stalls that stay open until 2am or 3am.</p>
+          <p>Popular locations include railway stations because thousands of people pass through every day. College gates always have food vendors because students want cheap, fast meals. Markets are busy places too. Shoppers take breaks to eat while they buy things. Beach areas attract families who want snacks while they relax.</p>
+          <p>Most vendors cook outside in the open air. Customers can watch their food being prepared. Many people return to the same vendor for years. They build friendships with the person who cooks their favourite dish. During the rainy season, some vendors work under bridges or inside covered spaces to stay dry.</p>
+        </div>
+      </article>
+
+      <!-- SECTION 2 -->
+      <article class="section-block" id="section2">
+        <div class="section-label">
+          <div class="section-number">2</div>
+          <h2 class="section-subtitle">Common Street Food Dishes</h2>
+        </div>
+        <div class="section-body clearfix">
+          <figure class="inline-figure">
+            <img
+              src="https://plus.unsplash.com/premium_photo-1695297516710-854716c51121?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400&auto=format&fit=crop"
+              alt="Indian street food dishes including samosa and chaat"
+              onerror="this.src='https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&auto=format&fit=crop'"
+            />
+            <figcaption>Samosas are one of India's most popular street snacks</figcaption>
+          </figure>
+          <p>Different parts of India have different street foods. In Delhi and North India, people eat <strong>chaat</strong> — savoury snacks with spices. <strong>Samosas</strong> are very popular: fried pastries filled with potato and peas. <strong>Golgappas</strong> are small crispy balls filled with spicy water. People eat them in one bite.</p>
+          <p>Mumbai has its own special foods. <strong>Vada pav</strong> is called the Indian burger. It is a spiced potato ball inside a bread roll. Another favourite is <strong>pav bhaji</strong>: mashed vegetables cooked with butter, eaten with soft bread. These foods are quick to eat and filling.</p>
+          <p>South Indian cities like Bangalore and Chennai serve lighter foods. <strong>Dosa</strong> is a thin pancake made from rice. It comes with potato filling inside. <strong>Idli</strong> are soft rice cakes, usually eaten with coconut sauce for breakfast. These dishes are often vegetarian.</p>
+          <p>In Kolkata, the most famous street food is the <strong>kathi roll</strong> — flatbread wrapped around meat or vegetables. Every region uses local ingredients. Street food tastes completely different as you travel across India. Each city is proud of its special dishes.</p>
+        </div>
+      </article>
+
+      <!-- SECTION 3 -->
+      <article class="section-block" id="section3">
+        <div class="section-label">
+          <div class="section-number">3</div>
+          <h2 class="section-subtitle">Why Street Food Matters</h2>
+        </div>
+        <div class="section-body clearfix">
+          <div class="pullquote">
+            "A complete meal from a street stall costs less than one pound — making it accessible for millions of workers."
+          </div>
+          <p>Street food is very cheap. A good snack costs 20 to 50 rupees — about 20 to 50 pence. A complete meal from a street stall costs 60 to 100 rupees, less than one pound. Workers with low salaries can afford to eat this food every day. For millions of Indians, street food is the only affordable option.</p>
+          <p>Many people work as street food vendors. They are self-employed and support their families through this work. A vendor might earn 500 to 800 rupees each day — around five to eight pounds. The work is hard. Vendors start very early, sometimes at 5am, and finish late at night.</p>
+          <p>Starting a street food business does not cost much money. A person needs a cart and some cooking equipment. They do not need bank loans. This helps people from poor backgrounds start their own business. Many vendors learn recipes from their parents and pass the business to their children.</p>
+          <p>Street vendors buy vegetables at local markets. They buy spices and cooking oil from small shops. This helps farmers and local traders earn money too. Street food creates work for many people, not just the vendors who cook and sell.</p>
+        </div>
+      </article>
+
+      <!-- SECTION 4 -->
+      <article class="section-block" id="section4">
+        <div class="section-label">
+          <div class="section-number">4</div>
+          <h2 class="section-subtitle">Social Life and Health Issues</h2>
+        </div>
+        <div class="section-body clearfix">
+          <figure class="inline-figure">
+            <img
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&auto=format&fit=crop"
+              alt="People eating together at an Indian food stall"
+              onerror="this.src='https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&auto=format&fit=crop'"
+            />
+            <figcaption>Food stalls bring people from all backgrounds together</figcaption>
+          </figure>
+          <p>Street food is important for Indian culture and daily life. Food stalls are places where different people meet. A rich businessman and a taxi driver might stand together, eating the same food. Everyone is equal at a food stall. This makes street food special in Indian society.</p>
+          <p>Many Indians have strong memories connected to street food. They remember eating certain snacks when they were students or children. These foods remind them of home and good times. When Indians live in other countries, they often miss street food very much.</p>
+          <p>However, street food has health problems. Vendors do not always have clean water to wash dishes and vegetables. Food is cooked outside where there is pollution and dust. Sometimes the cooking equipment is not cleaned properly. This can make people sick, especially tourists who are not used to the food.</p>
+          <p>City governments find this situation difficult. Street vendors need to earn money and feed people, but dirty conditions create health risks. Some cities try to move vendors to special food areas with better facilities. These plans usually fail because customers prefer the traditional street locations. Despite these problems, street food remains a central part of everyday life in India.</p>
+        </div>
+      </article>
+
+      <!-- VOCAB BOX -->
+      <div class="vocab-box">
+        <h3>📖 Key Vocabulary</h3>
+        <ul class="vocab-list">
+          <li><strong>vendor</strong> — a person who sells things, often on the street</li>
+          <li><strong>savoury</strong> — not sweet; salty or spicy in taste</li>
+          <li><strong>self-employed</strong> — working for yourself, not for a company</li>
+          <li><strong>affordable</strong> — cheap enough for most people to buy</li>
+          <li><strong>hygiene</strong> — keeping things clean to prevent illness</li>
+          <li><strong>sanitation</strong> — systems to keep places clean (water, waste disposal)</li>
+          <li><strong>vegetarian</strong> — food that contains no meat</li>
+          <li><strong>monsoon</strong> — the rainy season in South Asia (June–September)</li>
+        </ul>
+      </div>
+
+      <!-- RELATED TOPICS -->
+      <div style="margin-top:24px; padding-top:16px; border-top:4px solid var(--bbc-dark);">
+        <h2 style="font-family:var(--ui-font); font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--bbc-dark); margin-bottom:12px;">Related Topics</h2>
+        <div class="topic-tags">
+          <a class="topic-tag" href="#">India</a>
+          <a class="topic-tag" href="#">Food &amp; Culture</a>
+          <a class="topic-tag" href="#">Urban Life</a>
+          <a class="topic-tag" href="#">Economy</a>
+          <a class="topic-tag" href="#">Asia</a>
+          <a class="topic-tag" href="#">Health</a>
+        </div>
+      </div>
+
+    </div><!-- end main -->
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" style="width:280px; flex-shrink:0; padding-top:0;">
+
+      <div style="background:var(--bbc-red); color:#fff; font-family:var(--ui-font); font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; margin-bottom:0;">
+        🎓 Classroom Activity
+      </div>
+
+      <!-- QUIZ WIDGET -->
+      <div class="sidebar-widget" style="border-top:4px solid var(--bbc-red); padding:16px; background:var(--bbc-light-grey);">
+        <h2>Comprehension Quiz</h2>
+
+        <!-- Q1 -->
+        <div class="quiz-question">1. When is street food busiest?</div>
+        <ul class="quiz-options">
+          <li><label><input type="radio" name="q1" value="a"> In the morning</label></li>
+          <li><label><input type="radio" name="q1" value="b"> Between 6pm and 9pm</label></li>
+          <li><label><input type="radio" name="q1" value="c"> At midnight</label></li>
+        </ul>
+        <div class="quiz-feedback" id="f1"></div>
+
+        <!-- Q2 -->
+        <div class="quiz-question">2. What is "vada pav"?</div>
+        <ul class="quiz-options">
+          <li><label><input type="radio" name="q2" value="a"> A rice pancake from South India</label></li>
+          <li><label><input type="radio" name="q2" value="b"> A potato ball in a bread roll</label></li>
+          <li><label><input type="radio" name="q2" value="c"> A spicy water snack</label></li>
+        </ul>
+        <div class="quiz-feedback" id="f2"></div>
+
+        <!-- Q3 -->
+        <div class="quiz-question">3. How much does a street meal cost?</div>
+        <ul class="quiz-options">
+          <li><label><input type="radio" name="q3" value="a"> Around 5–10 pounds</label></li>
+          <li><label><input type="radio" name="q3" value="b"> Around 60–100 rupees</label></li>
+          <li><label><input type="radio" name="q3" value="c"> Around 500 rupees</label></li>
+        </ul>
+        <div class="quiz-feedback" id="f3"></div>
+
+        <!-- Q4 -->
+        <div class="quiz-question">4. Why do relocation plans often fail?</div>
+        <ul class="quiz-options">
+          <li><label><input type="radio" name="q4" value="a"> Vendors refuse to cook new food</label></li>
+          <li><label><input type="radio" name="q4" value="b"> Customers prefer traditional street locations</label></li>
+          <li><label><input type="radio" name="q4" value="c"> The government has no money</label></li>
+        </ul>
+        <div class="quiz-feedback" id="f4"></div>
+
+        <button class="btn-check" onclick="checkQuiz()">Check my answers</button>
+        <div class="quiz-score" id="quiz-score"></div>
+      </div>
+
+      <!-- READING TIPS -->
+      <div class="sidebar-widget">
+        <h2>Reading Tips</h2>
+        <p style="font-family:var(--ui-font); font-size:13px; color:var(--bbc-grey); line-height:1.5; margin-bottom:8px;">📌 Each section has a number. Read <strong>your section</strong> carefully — you will explain it to your group.</p>
+        <p style="font-family:var(--ui-font); font-size:13px; color:var(--bbc-grey); line-height:1.5;">🔍 Use the <strong>Key Vocabulary</strong> box below the article if you don't understand a word.</p>
+      </div>
+
+      <!-- DISCUSSION -->
+      <div class="sidebar-widget">
+        <h2>Discussion Questions</h2>
+        <ul style="list-style:none; font-family:var(--ui-font); font-size:13px; color:var(--bbc-grey); line-height:1.6;">
+          <li style="padding:6px 0; border-bottom:1px solid var(--bbc-border);">💬 Do you have street food in France? Is it similar?</li>
+          <li style="padding:6px 0; border-bottom:1px solid var(--bbc-border);">💬 Would you eat street food in India? Why or why not?</li>
+          <li style="padding:6px 0; border-bottom:1px solid var(--bbc-border);">💬 What are the advantages of cheap street food?</li>
+          <li style="padding:6px 0;">💬 Is hygiene more important than tradition?</li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="bbc-logo">
+    <span>B</span><span>B</span><span>C</span>
+  </div>
+  <div class="edu-badge">Educational Resource</div>
+  <p>This page is a classroom simulation of a BBC News article. It is designed for B1 English learners in French lycées.</p>
+  <p style="margin-top:6px;">© 2026 BBC – adapted for educational purposes</p>
+</footer>
+
+<script>
+  const answers = { q1: 'b', q2: 'b', q3: 'b', q4: 'b' };
+  const feedback = {
+    q1: { b: "✓ Correct! Between 6pm and 9pm, after work.", a: "✗ Not quite. Morning is busy, but not the busiest time.", c: "✗ Midnight is too late. Some stalls are open, but fewer people." },
+    q2: { b: "✓ Correct! A spiced potato ball in a bread roll, from Mumbai.", a: "✗ That's a dosa — from South India.", c: "✗ That's a golgappa — a Delhi snack." },
+    q3: { b: "✓ Correct! 60 to 100 rupees — less than one pound.", a: "✗ That would be a restaurant, not street food.", c: "✗ 500 rupees is too expensive for street food." },
+    q4: { b: "✓ Correct! Customers prefer the traditional street locations.", a: "✗ The article does not say this.", c: "✗ The article does not mention money problems." }
+  };
+
+  function checkQuiz() {
+    let score = 0;
+    ['q1','q2','q3','q4'].forEach(q => {
+      const sel = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById('f' + q.replace('q',''));
+      fb.style.display = 'block';
+      if (sel) {
+        const val = sel.value;
+        fb.textContent = feedback[q][val] || "Please select an answer.";
+        fb.className = 'quiz-feedback ' + (val === answers[q] ? 'correct' : 'wrong');
+        if (val === answers[q]) score++;
+      } else {
+        fb.textContent = "⚠ Please select an answer.";
+        fb.className = 'quiz-feedback wrong';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.style.display = 'block';
+    scoreEl.textContent = `Your score: ${score} / 4 — ${score === 4 ? '🎉 Perfect!' : score >= 2 ? '👍 Good effort!' : '📖 Read again carefully.'}`;
+  }
+</script>
+
+</body>
+</html>
