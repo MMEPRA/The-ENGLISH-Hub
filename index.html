@@ -209,6 +209,45 @@
     90%  { opacity: 1; }
     100% { left: 200%; opacity: 0; }
   }
+
+  /* ── ORGANIC WAVE GRADIENT "English" ── */
+  .english-wave {
+    background: linear-gradient(
+      90deg,
+      #ff2200 0%,
+      #ff5500 6%,
+      #ff8800 12%,
+      #ffbb00 18%,
+      #ffdd00 24%,
+      #aaee00 30%,
+      #44dd88 36%,
+      #00cccc 42%,
+      #0099ff 48%,
+      #4455ff 54%,
+      #8833ff 60%,
+      #aa00ff 64%,
+      #6633ff 68%,
+      #0099ff 74%,
+      #00cccc 79%,
+      #44dd88 84%,
+      #ffbb00 89%,
+      #ff8800 93%,
+      #ff5500 97%,
+      #ff2200 100%
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: englishWave 12s linear infinite;
+  }
+  @keyframes englishWave {
+    0%   { background-position: 0% center; }
+    100% { background-position: 300% center; }
+  }
+
+  /* ── CARD-FULL READABILITY ── */
+  .card-full { color: #e8e8f4 !important; }
 </style>
 </head>
 <body>
@@ -221,7 +260,7 @@
   <div class="hero-main">
     <h1 class="hero-title">
       <span class="the">The</span>
-      <span class="english" style="background:linear-gradient(90deg,#ff3b3b 0%,#ffb800 30%,#00e5d8 55%,#b94fff 80%,#00f0a0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">English</span>
+      <span class="english english-wave">English</span>
       <span class="hub">Hub</span>
     </h1>
     <div class="hero-aside">

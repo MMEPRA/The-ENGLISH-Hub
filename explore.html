@@ -13,6 +13,7 @@
     --line:  rgba(255,255,255,0.08);
     --text:  #f0f0f5;
     --muted: #8888aa;
+    --card-desc: #555566;
     --play:   #ff5252;
     --watch:  #5b8fff;
     --listen: #00d68f;
@@ -205,7 +206,7 @@
 
   .card-name { font-size:1.1rem; font-weight:700; letter-spacing:-0.2px; }
 
-  .card-desc { font-size:12.5px; color:var(--muted); line-height:1.6; flex:1; }
+  .card-desc { font-size:12.5px; color:#9898b8; line-height:1.6; flex:1; }
 
   .card-cta {
     display:inline-flex; align-items:center; gap:6px;
@@ -360,6 +361,48 @@
     background: radial-gradient(ellipse, rgba(255,160,0,0.08) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
+  }
+
+  .back-brand {
+    color: #ff8800;
+    font-weight: 800;
+    animation: brandPulseWarm 2.4s ease-in-out infinite;
+  }
+  @keyframes brandPulseWarm {
+    0%   { color: #ff6600; text-shadow: 0 0 6px rgba(255,100,0,0.3); }
+    50%  { color: #ffaa00; text-shadow: 0 0 16px rgba(255,160,0,0.7); }
+    100% { color: #ff6600; text-shadow: 0 0 6px rgba(255,100,0,0.3); }
+  }
+  .back-btn svg { color: #ff8800; }
+
+  .card[data-c="play"]   { border-top: 3px solid var(--play);   background: linear-gradient(180deg, rgba(255,82,82,0.06) 0%, var(--bg2) 40%); }
+  .card[data-c="watch"]  { border-top: 3px solid var(--watch);  background: linear-gradient(180deg, rgba(91,143,255,0.06) 0%, var(--bg2) 40%); }
+  .card[data-c="listen"] { border-top: 3px solid var(--listen); background: linear-gradient(180deg, rgba(0,214,143,0.06) 0%, var(--bg2) 40%); }
+  .card[data-c="world"]  { border-top: 3px solid var(--world);  background: linear-gradient(180deg, rgba(255,201,71,0.06) 0%, var(--bg2) 40%); }
+  .card[data-c="smart"]  { border-top: 3px solid var(--smart);  background: linear-gradient(180deg, rgba(199,125,255,0.06) 0%, var(--bg2) 40%); }
+  .card[data-c="play"]   .card-num { color: var(--play); }
+  .card[data-c="watch"]  .card-num { color: var(--watch); }
+  .card[data-c="listen"] .card-num { color: var(--listen); }
+  .card[data-c="world"]  .card-num { color: var(--world); }
+  .card[data-c="smart"]  .card-num { color: var(--smart); }
+  .card { opacity:0; transform:translateY(22px); transition:opacity 0.45s ease, transform 0.45s ease, border-color 0.2s, background 0.2s; }
+  .card.visible { opacity:1; transform:translateY(0); }
+  .card:active { transform:scale(0.97); }
+
+  header { position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-120px; left:-60px; width:600px; height:400px; background:radial-gradient(ellipse,rgba(255,100,0,0.13) 0%,rgba(255,50,0,0.06) 50%,transparent 70%); pointer-events:none; z-index:0; }
+
+  .page-title .accent {
+    background: linear-gradient(90deg, #ff2200, #ff6600, #ff9900, #ffcc00, #ff8800, #ff4400, #ff2200);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleWarm 6s linear infinite;
+  }
+  @keyframes titleWarm {
+    0%   { background-position: 0% center; }
+    100% { background-position: 300% center; }
   }
 </style>
 </head>
@@ -599,34 +642,7 @@
     } catch(e) {}
   }
 
-  // ARCADE SPARKS on Play cards hover
-  document.querySelectorAll('.card[data-c="play"]').forEach(function(card) {
-    var sparkInterval = null;
-    card.addEventListener('mouseenter', function() {
-      sparkInterval = setInterval(function() {
-        for (var i = 0; i < 3; i++) {
-          var s = document.createElement('div');
-          s.className = 'arcade-spark';
-          var size = 3 + Math.random() * 7;
-          var colors = ['#fff','#ffdd00','#ff5500','#ff9900','#ffaaaa','#ffffaa'];
-          s.style.cssText = [
-            'width:' + size + 'px',
-            'height:' + size + 'px',
-            'left:' + (Math.random() * 100) + '%',
-            'top:' + (Math.random() * 100) + '%',
-            'background:' + colors[Math.floor(Math.random()*colors.length)],
-            'box-shadow: 0 0 ' + (size*2) + 'px ' + colors[Math.floor(Math.random()*colors.length)],
-            '--dur:' + (0.3 + Math.random()*0.5) + 's'
-          ].join(';');
-          card.appendChild(s);
-          setTimeout(function() { s.remove(); }, 800);
-        }
-      }, 120);
-    });
-    card.addEventListener('mouseleave', function() {
-      clearInterval(sparkInterval);
-    });
-  });
+
 
   document.querySelectorAll('.card').forEach(function(card) {
     card.addEventListener('click', playPop);
