@@ -404,6 +404,19 @@
     0%   { background-position: 0% center; }
     100% { background-position: 300% center; }
   }
+
+  /* ── CURSOR CONFETTI ── */
+  .cursor-confetti {
+    position: fixed;
+    pointer-events: none;
+    border-radius: var(--br);
+    z-index: 9999;
+    animation: confettiBurst var(--dur) ease-out forwards;
+  }
+  @keyframes confettiBurst {
+    0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.3); opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -649,6 +662,61 @@
   });
 
 
+
+  // CURSOR CONFETTI on Play cards
+  var confettiColors = ['#ff3b3b','#ff6600','#ffaa00','#ffcc00','#ff8844','#ffddaa','#ffffff'];
+
+  function spawnConfetti(x, y) {
+    for (var i = 0; i < 4; i++) {
+      var c = document.createElement('div');
+      c.className = 'cursor-confetti';
+      var size = 4 + Math.random() * 5;
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 20 + Math.random() * 35;
+      c.style.cssText = [
+        'width:' + size + 'px',
+        'height:' + (Math.random() > 0.5 ? size : size * 0.5) + 'px',
+        'left:' + x + 'px',
+        'top:' + y + 'px',
+        'background:' + confettiColors[Math.floor(Math.random() * confettiColors.length)],
+        '--br:' + (Math.random() > 0.5 ? '50%' : '2px'),
+        '--tx:' + (Math.cos(angle) * dist) + 'px',
+        '--ty:' + (Math.sin(angle) * dist) + 'px',
+        '--rot:' + (Math.random() * 360) + 'deg',
+        '--dur:' + (0.4 + Math.random() * 0.4) + 's'
+      ].join(';');
+      document.body.appendChild(c);
+      setTimeout(function(el) { el.remove(); }, 900, c);
+    }
+  }
+
+  document.querySelectorAll('.card[data-c="play"]').forEach(function(card) {
+    // Mouse
+    card.addEventListener('mousemove', function(e) {
+      spawnConfetti(e.clientX, e.clientY);
+    });
+    // Touch
+    card.addEventListener('touchmove', function(e) {
+      var t = e.touches[0];
+      spawnConfetti(t.clientX, t.clientY);
+    }, { passive: true });
+    // Burst on enter
+    card.addEventListener('mouseenter', function(e) {
+      for (var i = 0; i < 10; i++) {
+        (function(i) {
+          setTimeout(function() { spawnConfetti(e.clientX, e.clientY); }, i * 30);
+        })(i);
+      }
+    });
+    card.addEventListener('touchstart', function(e) {
+      var t = e.touches[0];
+      for (var i = 0; i < 10; i++) {
+        (function(i) {
+          setTimeout(function() { spawnConfetti(t.clientX, t.clientY); }, i * 30);
+        })(i);
+      }
+    }, { passive: true });
+  });
 </script>
 </body>
 </html>
