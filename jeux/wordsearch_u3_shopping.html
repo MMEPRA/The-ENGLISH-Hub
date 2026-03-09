@@ -221,53 +221,66 @@ function endSel(r,c){
 
 document.addEventListener('mouseup',()=>{if(selecting){selecting=false;clearSel();}});
 
-// ── SOUNDS (Web Audio API – no external files needed) ──
-const AC=new (window.AudioContext||window.webkitAudioContext)();
+// ── FUN SOUNDS (Web Audio API – no files needed) ──
+const AC=new(window.AudioContext||window.webkitAudioContext)();
+document.addEventListener('pointerdown',()=>{if(AC.state==='suspended')AC.resume();},{once:true});
 
 function playCorrect(){
-  // Cheerful two-note chime: C5 → E5
-  [[523.25,0,0.12],[659.25,0.13,0.22]].forEach(([freq,start,end])=>{
-    const o=AC.createOscillator(),g=AC.createGain();
-    o.connect(g);g.connect(AC.destination);
-    o.type='sine';o.frequency.value=freq;
-    const t=AC.currentTime;
-    g.gain.setValueAtTime(0,t+start);
-    g.gain.linearRampToValueAtTime(0.35,t+start+0.03);
-    g.gain.exponentialRampToValueAtTime(0.001,t+end+0.18);
-    o.start(t+start);o.stop(t+end+0.2);
-  });
+  // Boing! springy sweep up + sparkle
+  const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);
+  o.type='sine';
+  o.frequency.setValueAtTime(300,t);
+  o.frequency.exponentialRampToValueAtTime(900,t+0.12);
+  o.frequency.exponentialRampToValueAtTime(700,t+0.22);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.4,t+0.04);g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+  o.start(t);o.stop(t+0.36);
+  // sparkle on top
+  const o2=AC.createOscillator(),g2=AC.createGain();
+  o2.connect(g2);g2.connect(AC.destination);
+  o2.type='triangle';
+  o2.frequency.setValueAtTime(1400,t+0.1);o2.frequency.exponentialRampToValueAtTime(1800,t+0.2);
+  g2.gain.setValueAtTime(0,t+0.1);g2.gain.linearRampToValueAtTime(0.18,t+0.13);g2.gain.exponentialRampToValueAtTime(0.001,t+0.28);
+  o2.start(t+0.1);o2.stop(t+0.3);
 }
 
 function playWrong(){
-  // Low short buzz: two descending notes
-  [[220,0,0.1],[180,0.12,0.22]].forEach(([freq,start,end])=>{
-    const o=AC.createOscillator(),g=AC.createGain();
-    o.connect(g);g.connect(AC.destination);
-    o.type='sawtooth';o.frequency.value=freq;
-    const t=AC.currentTime;
-    g.gain.setValueAtTime(0,t+start);
-    g.gain.linearRampToValueAtTime(0.2,t+start+0.02);
-    g.gain.exponentialRampToValueAtTime(0.001,t+end+0.08);
-    o.start(t+start);o.stop(t+end+0.1);
-  });
+  // Womp womp: sad tuba glide down
+  const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);
+  o.type='sawtooth';
+  o.frequency.setValueAtTime(280,t);o.frequency.exponentialRampToValueAtTime(100,t+0.35);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.28,t+0.04);g.gain.exponentialRampToValueAtTime(0.001,t+0.42);
+  o.start(t);o.stop(t+0.44);
+  // low rumble
+  const o2=AC.createOscillator(),g2=AC.createGain();
+  o2.connect(g2);g2.connect(AC.destination);
+  o2.type='square';o2.frequency.value=55;
+  g2.gain.setValueAtTime(0.12,t+0.05);g2.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+  o2.start(t+0.05);o2.stop(t+0.36);
 }
 
 function playWin(){
-  // Short ascending fanfare: C5 E5 G5 C6
-  [[523.25,0],[659.25,0.12],[783.99,0.24],[1046.5,0.36]].forEach(([freq,start])=>{
+  // Party arpeggio + chord shimmer
+  [523,659,784,1047,1319].forEach((freq,i)=>{
+    const t=AC.currentTime+i*0.09;
     const o=AC.createOscillator(),g=AC.createGain();
     o.connect(g);g.connect(AC.destination);
     o.type='sine';o.frequency.value=freq;
-    const t=AC.currentTime;
-    g.gain.setValueAtTime(0,t+start);
-    g.gain.linearRampToValueAtTime(0.3,t+start+0.03);
-    g.gain.exponentialRampToValueAtTime(0.001,t+start+0.28);
-    o.start(t+start);o.stop(t+start+0.3);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.3,t+0.03);g.gain.exponentialRampToValueAtTime(0.001,t+0.32);
+    o.start(t);o.stop(t+0.34);
+  });
+  [1047,1319,1568].forEach((freq,i)=>{
+    const t=AC.currentTime+0.5+i*0.05;
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='triangle';o.frequency.value=freq;
+    g.gain.setValueAtTime(0.18,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+    o.start(t);o.stop(t+0.52);
   });
 }
-
-// Unlock AudioContext on first user interaction
-document.addEventListener('pointerdown',()=>{if(AC.state==='suspended')AC.resume();},{once:true});
 
 function checkWord(word,cells){
   const found=activeWords.find(w=>w.word===word&&!foundWords.has(w.word));
