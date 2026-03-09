@@ -112,7 +112,7 @@ const WORDS=[
   {word:'VANILLA',emoji:'🌿',fr:'vanille',level:'a2'},
   {word:'CHEAP',emoji:'💸',fr:'pas cher',level:'a2'},
 ];
-const SZ=14;
+const SZ=11;
 let grid=[],solution={},placedWords=[],activeWords=[],foundWords=new Set();
 let selecting=false,selStart=null,selEnd=null,selectedCells=[];
 let timerInterval=null,seconds=0,currentLevel='a1';
@@ -221,14 +221,64 @@ function endSel(r,c){
 
 document.addEventListener('mouseup',()=>{if(selecting){selecting=false;clearSel();}});
 
+// ── SOUNDS (Web Audio API – no external files needed) ──
+const AC=new (window.AudioContext||window.webkitAudioContext)();
+
+function playCorrect(){
+  // Cheerful two-note chime: C5 → E5
+  [[523.25,0,0.12],[659.25,0.13,0.22]].forEach(([freq,start,end])=>{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='sine';o.frequency.value=freq;
+    const t=AC.currentTime;
+    g.gain.setValueAtTime(0,t+start);
+    g.gain.linearRampToValueAtTime(0.35,t+start+0.03);
+    g.gain.exponentialRampToValueAtTime(0.001,t+end+0.18);
+    o.start(t+start);o.stop(t+end+0.2);
+  });
+}
+
+function playWrong(){
+  // Low short buzz: two descending notes
+  [[220,0,0.1],[180,0.12,0.22]].forEach(([freq,start,end])=>{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='sawtooth';o.frequency.value=freq;
+    const t=AC.currentTime;
+    g.gain.setValueAtTime(0,t+start);
+    g.gain.linearRampToValueAtTime(0.2,t+start+0.02);
+    g.gain.exponentialRampToValueAtTime(0.001,t+end+0.08);
+    o.start(t+start);o.stop(t+end+0.1);
+  });
+}
+
+function playWin(){
+  // Short ascending fanfare: C5 E5 G5 C6
+  [[523.25,0],[659.25,0.12],[783.99,0.24],[1046.5,0.36]].forEach(([freq,start])=>{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='sine';o.frequency.value=freq;
+    const t=AC.currentTime;
+    g.gain.setValueAtTime(0,t+start);
+    g.gain.linearRampToValueAtTime(0.3,t+start+0.03);
+    g.gain.exponentialRampToValueAtTime(0.001,t+start+0.28);
+    o.start(t+start);o.stop(t+start+0.3);
+  });
+}
+
+// Unlock AudioContext on first user interaction
+document.addEventListener('pointerdown',()=>{if(AC.state==='suspended')AC.resume();},{once:true});
+
 function checkWord(word,cells){
   const found=activeWords.find(w=>w.word===word&&!foundWords.has(w.word));
   if(found){
+    playCorrect();
     foundWords.add(word);markFound(word,true);
     showToast(`✅ "${word[0]+word.slice(1).toLowerCase()}" found! ${found.emoji}`);
     clearSel();updateProgress();
-    if(foundWords.size===activeWords.length)setTimeout(showWin,600);
+    if(foundWords.size===activeWords.length){playWin();setTimeout(showWin,600);}
   } else {
+    playWrong();
     selectedCells.forEach(({r,c})=>{const el=getCell(r,c);if(el){el.style.animation='shake .3s ease';setTimeout(()=>el.style.animation='',400);}});
     setTimeout(clearSel,400);
   }
