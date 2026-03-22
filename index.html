@@ -491,7 +491,7 @@ function openMagDetail(classTitle,idx){
   var audioHtml=renderAudioSection(s.audio);
   var gamesHtml=renderGamesSection(key,s.num);
   var detail=document.getElementById('mag-detail');var grid=document.getElementById('mag-grid');
-  detail.innerHTML='<div class="mag-detail-header"><button class="mag-back" onclick="closeMagDetail()">← Retour</button><span class="mag-detail-title">'+s.title+'</span></div>'+imgHtml+'<div class="mag-detail-desc">'+s.desc+'</div>'+videoHtml+canvaHtml+audioHtml+gamesHtml+folderHtml+wsHtml;
+  detail.innerHTML='<div class="mag-detail-header"><button class="mag-back" onclick="closeMagDetail()">← Retour</button><span class="mag-detail-title">'+s.title+'</span></div>'+imgHtml+'<div class="mag-detail-desc">'+s.desc+'</div>'+canvaHtml+videoHtml+audioHtml+gamesHtml+folderHtml+wsHtml;
   grid.style.display='none';detail.classList.add('open');
 }
 function closeMagDetail(){document.getElementById('mag-detail').classList.remove('open');document.getElementById('mag-grid').style.display='';}
