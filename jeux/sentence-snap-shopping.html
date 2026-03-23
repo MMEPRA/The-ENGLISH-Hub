@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentence Snap · Let's Go Shopping!</title>
+<style>
+:root{
+  --bg:#fdf6ec;--card:#ffffff;
+  --amber:#e07820;--amber-light:#f5a84a;--amber-pale:#fdecd0;--amber-dark:#b85a10;
+  --green:#4caf6e;--green-light:#e8f8ee;--green-dark:#2e7d4f;
+  --red:#e05555;--red-light:#fdeaea;
+  --blue:#4a90d4;--blue-light:#e8f2fc;
+  --purple:#8b5cf6;--purple-light:#f3effe;
+  --text:#2a1a00;--text2:#6a4a20;--text3:#aaa;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);min-height:100vh;padding:1.2rem 1rem 3rem;}
+
+/* ── HEADER ── */
+.header{text-align:center;margin-bottom:1.1rem;}
+.unit-tag{display:inline-block;background:var(--amber);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.28rem .9rem;border-radius:999px;margin-bottom:.45rem;}
+h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;color:var(--amber-dark);}
+h1 span{color:var(--amber);}
+.subtitle{font-size:.86rem;color:var(--text2);margin-top:.2rem;}
+.ccf-badge{display:inline-flex;align-items:center;gap:.25rem;background:var(--purple);color:#fff;font-size:.63rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.18rem .65rem;border-radius:999px;margin-left:.35rem;vertical-align:middle;}
+
+/* ── LEVEL BUTTONS ── */
+.level-bar{display:flex;gap:.6rem;justify-content:center;margin-bottom:1.1rem;flex-wrap:wrap;}
+.level-btn{padding:.48rem 1.25rem;border-radius:999px;border:2px solid var(--amber-light);background:#fff;color:var(--amber);font-family:inherit;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.level-btn.active{background:var(--amber);color:#fff;border-color:var(--amber);box-shadow:0 4px 14px rgba(224,120,32,.33);transform:translateY(-1px);}
+.level-btn:hover:not(.active){background:var(--amber-pale);}
+
+/* ── STATS ROW ── */
+.stats-row{display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
+.stat-chip{background:#fff;border:2px solid var(--amber-pale);border-radius:999px;padding:.28rem .85rem;font-size:.8rem;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:.28rem;}
+.lives-display{display:flex;gap:3px;}
+.life{font-size:1rem;transition:opacity .3s;}
+.life.lost{opacity:.18;filter:grayscale(1);}
+
+/* ── A1 HELPER ── */
+.a1-helper{display:none;background:var(--blue-light);border:2px solid var(--blue);border-radius:13px;padding:.65rem 1rem;margin-bottom:1rem;max-width:700px;margin-left:auto;margin-right:auto;font-size:.83rem;color:#1a4a80;font-weight:600;text-align:center;}
+body.mode-a1 .a1-helper{display:block;}
+
+/* ── MAIN CARD ── */
+.game-card{background:var(--card);border-radius:20px;padding:1.4rem 1.4rem 1.6rem;box-shadow:0 4px 24px rgba(180,100,0,.09);border:2px solid var(--amber-pale);max-width:700px;margin:0 auto;}
+
+/* ── PROGRESS ── */
+.q-progress{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem;}
+.q-label{font-size:.75rem;font-weight:700;color:var(--text2);white-space:nowrap;}
+.q-bar-wrap{flex:1;background:var(--bg);border-radius:999px;height:8px;overflow:hidden;}
+.q-bar-fill{height:100%;background:linear-gradient(90deg,var(--amber-light),var(--amber));border-radius:999px;transition:width .5s ease;}
+.score-badge{background:var(--amber-pale);color:var(--amber-dark);font-size:.75rem;font-weight:700;padding:.22rem .75rem;border-radius:999px;white-space:nowrap;}
+
+/* ── CONTEXT CHIP ── */
+.context-chip{display:inline-flex;align-items:center;gap:.4rem;background:var(--purple-light);border:1.5px solid #d0bcfa;border-radius:10px;padding:.38rem .85rem;font-size:.8rem;font-weight:600;color:#5b3ecb;margin-bottom:.85rem;}
+
+/* ── TRANSLATION HINT ── */
+.translation-hint{display:none;background:var(--blue-light);border-radius:10px;padding:.5rem .9rem;font-size:.82rem;color:#1a4a80;font-weight:600;margin-bottom:.85rem;text-align:center;}
+body.mode-a1 .translation-hint{display:block;}
+
+/* ── DROP ZONE ── */
+.drop-zone-label{font-size:.73rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:.45rem;}
+.drop-zone{min-height:58px;background:var(--bg);border:2px dashed var(--amber-light);border-radius:14px;padding:.55rem .7rem;display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:1rem;transition:border-color .2s,background .2s;}
+.drop-zone.drag-over{border-color:var(--amber);background:var(--amber-pale);}
+.drop-zone.correct-flash{border-color:var(--green);background:var(--green-light);animation:correctPulse .45s ease;}
+.drop-zone.wrong-flash{border-color:var(--red);background:var(--red-light);animation:shake .35s ease;}
+@keyframes correctPulse{0%{transform:scale(1)}40%{transform:scale(1.015)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.drop-placeholder{font-size:.85rem;color:var(--text3);font-style:italic;pointer-events:none;padding:.1rem .2rem;}
+
+/* ── WORD TOKENS ── */
+.token{display:inline-flex;align-items:center;padding:.38rem .82rem;border-radius:10px;font-size:.95rem;font-weight:700;cursor:grab;user-select:none;border:2px solid transparent;transition:transform .15s,box-shadow .15s,opacity .2s;touch-action:none;}
+.token:active{cursor:grabbing;}
+.token.bank-token{background:#fff;border-color:var(--amber-light);color:var(--text);box-shadow:0 2px 8px rgba(180,100,0,.12);}
+.token.bank-token:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(180,100,0,.2);border-color:var(--amber);}
+.token.placed-token{background:var(--amber-pale);border-color:var(--amber-light);color:var(--amber-dark);}
+.token.placed-token:hover{transform:translateY(-2px);border-color:var(--amber);}
+.token.dragging{opacity:.35;transform:scale(.95);}
+.token.correct-lock{background:var(--green-light);border-color:var(--green);color:var(--green-dark);cursor:default;}
+
+/* ── WORD BANK ── */
+.bank-label{font-size:.73rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:.45rem;}
+.word-bank{min-height:52px;background:var(--bg);border:2px solid var(--amber-pale);border-radius:14px;padding:.55rem .7rem;display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:1.1rem;}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:.7rem;flex-wrap:wrap;}
+.btn{padding:.52rem 1.3rem;border-radius:999px;border:none;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-check{background:var(--amber);color:#fff;box-shadow:0 3px 12px rgba(224,120,32,.35);}
+.btn-check:hover{background:var(--amber-dark);transform:translateY(-1px);}
+.btn-check:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.btn-clear{background:#fff;color:var(--text2);border:2px solid var(--amber-pale);}
+.btn-clear:hover{background:var(--amber-pale);}
+.btn-hint{background:var(--blue-light);color:var(--blue);border:2px solid var(--blue);display:none;}
+body.mode-a1 .btn-hint{display:block;}
+.btn-hint:hover{background:var(--blue);color:#fff;}
+.btn-hint:disabled{opacity:.45;cursor:not-allowed;}
+
+/* ── FEEDBACK ── */
+.feedback{min-height:2rem;margin-top:.75rem;font-size:.9rem;font-weight:700;text-align:center;transition:opacity .3s;}
+.feedback.correct{color:var(--green-dark);}
+.feedback.wrong{color:var(--red);}
+.feedback.hint-msg{color:var(--blue);}
+
+/* ── WIN / GAME OVER SCREEN ── */
+.end-screen{display:none;text-align:center;padding:1.5rem .5rem;}
+.end-screen.show{display:block;animation:winPop .5s cubic-bezier(.175,.885,.32,1.275) both;}
+@keyframes winPop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
+.end-emoji{font-size:3rem;margin-bottom:.35rem;}
+.end-title{font-size:1.45rem;font-weight:800;color:var(--amber-dark);margin-bottom:.2rem;}
+.end-sub{font-size:.92rem;color:var(--text2);margin-bottom:1rem;}
+.end-score{font-size:2rem;font-weight:800;color:var(--amber);margin-bottom:1rem;}
+.btn-again{padding:.62rem 1.8rem;background:var(--amber);color:#fff;border:none;border-radius:999px;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(224,120,32,.38);transition:all .2s;}
+.btn-again:hover{background:var(--amber-dark);transform:translateY(-2px);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#fff;padding:.62rem 1.5rem;border-radius:999px;font-weight:700;font-size:.92rem;transition:transform .35s cubic-bezier(.175,.885,.32,1.275);z-index:999;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body class="mode-a1">
+<div class="toast" id="toast"></div>
+
+<div class="header">
+  <div class="unit-tag">Unit 3 · Let's Go Shopping</div>
+  <h1>✂️ Sentence <span>Snap</span></h1>
+  <p class="subtitle">Put the words in the right order! <span class="ccf-badge">🎯 CCF Prep</span></p>
+</div>
+
+<div class="level-bar">
+  <button class="level-btn active" id="btn-a1" onclick="setLevel('a1')">🟢 A1 Starter <small style="font-weight:400;font-size:.73rem"> · avec aide</small></button>
+  <button class="level-btn" id="btn-a2" onclick="setLevel('a2')">🟡 A2 Challenge <small style="font-weight:400;font-size:.73rem"> · sans aide</small></button>
+</div>
+
+<div class="a1-helper">💡 <strong>How to play:</strong> Click the words below to add them to the sentence. Click a placed word to send it back. Then press <strong>Check!</strong></div>
+
+<div class="stats-row">
+  <div class="stat-chip">⏱ <span id="timer-display">00:00</span></div>
+  <div class="stat-chip">❤️ <div class="lives-display" id="lives-display"></div></div>
+  <div class="stat-chip">📝 <span id="q-counter">1 / 1</span></div>
+</div>
+
+<div class="game-card" id="game-card">
+  <!-- progress -->
+  <div class="q-progress">
+    <span class="q-label" id="q-label">Q 1</span>
+    <div class="q-bar-wrap"><div class="q-bar-fill" id="q-bar"></div></div>
+    <span class="score-badge">Score: <span id="score-val">0</span></span>
+  </div>
+
+  <!-- context -->
+  <div class="context-chip" id="context-chip">🛒 In a shop</div>
+
+  <!-- translation hint (A1 only) -->
+  <div class="translation-hint" id="translation-hint">🇫🇷 …</div>
+
+  <!-- drop zone -->
+  <div class="drop-zone-label">Your sentence</div>
+  <div class="drop-zone" id="drop-zone">
+    <span class="drop-placeholder" id="drop-placeholder">Click words to build the sentence…</span>
+  </div>
+
+  <!-- word bank -->
+  <div class="bank-label">Word bank</div>
+  <div class="word-bank" id="word-bank"></div>
+
+  <!-- buttons -->
+  <div class="btn-row">
+    <button class="btn btn-check" id="btn-check" onclick="checkAnswer()">✅ Check!</button>
+    <button class="btn btn-clear" onclick="clearDropZone()">🔄 Reset</button>
+    <button class="btn btn-hint" id="btn-hint" onclick="giveHint()">💡 Hint</button>
+  </div>
+  <div class="feedback" id="feedback"></div>
+
+  <!-- end screen -->
+  <div class="end-screen" id="end-screen">
+    <div class="end-emoji" id="end-emoji">🎉</div>
+    <div class="end-title" id="end-title">Well done!</div>
+    <div class="end-score" id="end-score"></div>
+    <div class="end-sub" id="end-sub"></div>
+    <button class="btn-again" onclick="startGame()">🔄 New Game</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  SENTENCE POOL
+// ═══════════════════════════════════════════
+const ALL_SENTENCES = [
+  // A1 — short, high-frequency structures
+  {words:['How','much','is','this','hoodie','?'],      fr:'Combien coûte ce sweat ?',             context:'💬 Asking the price',   level:'a1'},
+  {words:['I','want','a','blue','jacket','.'],          fr:'Je veux une veste bleue.',             context:'🛍️ Choosing an item',   level:'a1'},
+  {words:['Can','I','try','this','on','?'],             fr:'Est-ce que je peux essayer ça ?',      context:'👗 Fitting room',        level:'a1'},
+  {words:['It','is','too','tight','.'],                 fr:"C'est trop serré.",                   context:'👗 Fitting room',        level:'a1'},
+  {words:['I','have','a','discount','card','.'],        fr:"J'ai une carte de réduction.",        context:'🔖 Discount',            level:'a1'},
+  {words:['Do','you','have','this','in','red','?'],     fr:'Vous avez ça en rouge ?',             context:'🎨 Colours',             level:'a1'},
+  {words:['It','is','very','cheap','!'],                fr:"C'est très bon marché !",             context:'💸 Prices',              level:'a1'},
+  {words:['I','need','a','pair','of','trainers','.'],   fr:"J'ai besoin d'une paire de baskets.", context:'👟 Footwear',            level:'a1'},
+  {words:['Can','I','pay','by','card','?'],             fr:'Je peux payer par carte ?',           context:'💳 Payment',             level:'a1'},
+  {words:['Where','is','the','checkout','?'],           fr:'Où est la caisse ?',                  context:'🛒 In the shop',         level:'a1'},
+  {words:['This','belt','is','perfect','!'],            fr:'Cette ceinture est parfaite !',       context:'✅ Fitting room',        level:'a1'},
+  {words:['How','many','socks','do','you','want','?'],  fr:'Combien de chaussettes voulez-vous ?',context:'🧦 Quantity',            level:'a1'},
+
+  // A2 — longer, more complex
+  {words:['I','am','looking','for','a','black','snapback','.'],      fr:'Je cherche une casquette noire.',           context:'🧢 Accessories',         level:'a2'},
+  {words:['Could','I','have','a','refund','please','?'],              fr:'Est-ce que je pourrais être remboursé(e) ?',context:'↩️ Refund',              level:'a2'},
+  {words:['The','price','is','too','expensive','for','my','budget','.'], fr:"Le prix est trop élevé pour mon budget.",context:'💰 Budget',              level:'a2'},
+  {words:['I','would','like','to','try','on','these','trousers','.'], fr:'Je voudrais essayer ce pantalon.',          context:'👖 Fitting room',        level:'a2'},
+  {words:['Do','you','have','a','larger','size','in','stock','?'],    fr:'Vous avez une taille au-dessus en stock ?', context:'📦 Stock',               level:'a2'},
+  {words:['Can','I','have','the','receipt','please','?'],             fr:'Je peux avoir le reçu s\'il vous plaît ?',  context:'🧾 Receipt',             level:'a2'},
+  {words:['The','fitting','room','is','at','the','back','of','the','shop','.'], fr:'La cabine d\'essayage est au fond du magasin.',context:'🪞 Fitting room',      level:'a2'},
+  {words:['This','sweatshirt','is','loose','but','I','like','it','.'],fr:'Ce sweatshirt est ample mais je l\'aime bien.',context:'👕 Fitting',          level:'a2'},
+  {words:['There','is','a','massive','discount','on','trainers','today','.'],fr:"Il y a une énorme réduction sur les baskets aujourd'hui.",context:'🔖 Promotions',     level:'a2'},
+  {words:['I','am','trying','on','the','beanie','but','it','is','too','small','.'],fr:'J\'essaie le bonnet mais il est trop petit.',context:'🧢 Fitting room',     level:'a2'},
+  {words:['Excuse','me',',','where','is','the','clothing','section','?'],fr:'Excusez-moi, où est le rayon vêtements ?',context:'🗂️ In the shop',        level:'a2'},
+  {words:['Could','you','give','me','some','change','please','?'],    fr:'Pouvez-vous me rendre la monnaie ?',        context:'🪙 Payment',             level:'a2'},
+];
+
+const PICK_COUNT = 8;
+const MAX_LIVES = 3;
+const HINT_COST = 1; // lives lost per hint
+
+let currentLevel = 'a1';
+let queue = [], qIdx = 0, score = 0, lives = MAX_LIVES;
+let placed = [], bank = [];
+let hintsUsed = 0;
+let timerInterval = null, seconds = 0;
+let checking = false;
+
+// ─── SHUFFLE ──────────────────────────────
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pickRandom(arr,n){return shuffle(arr).slice(0,Math.min(n,arr.length));}
+
+// ─── START ────────────────────────────────
+function startGame(){
+  const pool = currentLevel==='a1'
+    ? ALL_SENTENCES.filter(s=>s.level==='a1')
+    : ALL_SENTENCES;
+  queue = pickRandom(pool, PICK_COUNT);
+  qIdx=0; score=0; lives=MAX_LIVES; seconds=0; hintsUsed=0;
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    seconds++;
+    const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+  },1000);
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('game-card').querySelectorAll('.q-progress,.context-chip,.translation-hint,.drop-zone-label,.drop-zone,.bank-label,.word-bank,.btn-row,.feedback').forEach(el=>el.style.display='');
+  renderLives();
+  loadQuestion();
+}
+
+function renderLives(){
+  const el=document.getElementById('lives-display');
+  el.innerHTML='';
+  for(let i=0;i<MAX_LIVES;i++){
+    const sp=document.createElement('span');
+    sp.className='life'+(i>=lives?' lost':'');
+    sp.textContent='❤️';
+    el.appendChild(sp);
+  }
+}
+
+// ─── LOAD QUESTION ────────────────────────
+function loadQuestion(){
+  if(qIdx>=queue.length){showEnd();return;}
+  const q=queue[qIdx];
+  placed=[]; bank=shuffle([...q.words]);
+  hintsUsed=0;
+  checking=false;
+
+  // header
+  document.getElementById('q-label').textContent=`Q ${qIdx+1}`;
+  document.getElementById('q-counter').textContent=`${qIdx+1} / ${queue.length}`;
+  document.getElementById('q-bar').style.width=`${(qIdx/queue.length)*100}%`;
+  document.getElementById('score-val').textContent=score;
+
+  // context & translation
+  document.getElementById('context-chip').textContent=q.context;
+  document.getElementById('translation-hint').textContent=`🇫🇷 ${q.fr}`;
+
+  // feedback clear
+  const fb=document.getElementById('feedback');
+  fb.textContent='';fb.className='feedback';
+
+  // hint btn
+  const hb=document.getElementById('btn-hint');
+  hb.disabled=false;hb.textContent='💡 Hint';
+
+  renderDropZone();
+  renderBank();
+  document.getElementById('btn-check').disabled=false;
+}
+
+// ─── RENDER ───────────────────────────────
+function renderDropZone(){
+  const dz=document.getElementById('drop-zone');
+  dz.innerHTML='';
+  if(placed.length===0){
+    const ph=document.createElement('span');
+    ph.className='drop-placeholder';
+    ph.textContent='Click words to build the sentence…';
+    dz.appendChild(ph);
+  } else {
+    placed.forEach((w,i)=>{
+      const t=makeToken(w,'placed-token',()=>moveToBank(i));
+      dz.appendChild(t);
+    });
+  }
+}
+
+function renderBank(){
+  const bk=document.getElementById('word-bank');
+  bk.innerHTML='';
+  bank.forEach((w,i)=>{
+    const t=makeToken(w,'bank-token',()=>moveToDropZone(i));
+    bk.appendChild(t);
+  });
+}
+
+function makeToken(text,cls,onClick){
+  const t=document.createElement('div');
+  t.className=`token ${cls}`;
+  t.textContent=text;
+  t.addEventListener('click',onClick);
+  return t;
+}
+
+function moveToDropZone(bankIdx){
+  if(checking)return;
+  placed.push(bank[bankIdx]);
+  bank.splice(bankIdx,1);
+  renderDropZone();renderBank();
+}
+
+function moveToBank(placedIdx){
+  if(checking)return;
+  bank.push(placed[placedIdx]);
+  placed.splice(placedIdx,1);
+  renderDropZone();renderBank();
+}
+
+function clearDropZone(){
+  if(checking)return;
+  bank=[...bank,...placed];
+  placed=[];
+  renderDropZone();renderBank();
+  const fb=document.getElementById('feedback');fb.textContent='';fb.className='feedback';
+}
+
+// ─── CHECK ────────────────────────────────
+function checkAnswer(){
+  if(checking)return;
+  const q=queue[qIdx];
+  if(placed.length===0){showFeedback('Add some words first! 👆','wrong');return;}
+
+  const userSentence=placed.join(' ').replace(/\s([?.!,])/g,'$1');
+  const correct=q.words.join(' ').replace(/\s([?.!,])/g,'$1');
+
+  if(userSentence===correct){
+    playCorrect();
+    const pts=hintsUsed>0?1:2;
+    score+=pts;
+    document.getElementById('score-val').textContent=score;
+    showFeedback(`✅ Perfect! +${pts} point${pts>1?'s':''}${hintsUsed>0?' (hint used)':''}`, 'correct');
+    flashDropZone('correct-flash');
+    checking=true;
+    document.getElementById('btn-check').disabled=true;
+    setTimeout(()=>{qIdx++;loadQuestion();},1400);
+  } else {
+    playWrong();
+    lives--;renderLives();
+    flashDropZone('wrong-flash');
+    if(lives<=0){
+      showFeedback(`❌ The answer was: "${correct}"`, 'wrong');
+      checking=true;
+      document.getElementById('btn-check').disabled=true;
+      setTimeout(()=>{
+        if(lives<=0&&qIdx<queue.length-1){qIdx++;lives=1;renderLives();loadQuestion();}
+        else{showEnd();}
+      },2000);
+    } else {
+      showFeedback(`❌ Not quite… ${lives} ❤️ left. Try again!`,'wrong');
+    }
+  }
+}
+
+function flashDropZone(cls){
+  const dz=document.getElementById('drop-zone');
+  dz.classList.add(cls);
+  setTimeout(()=>dz.classList.remove(cls),500);
+}
+
+function showFeedback(msg,type){
+  const fb=document.getElementById('feedback');
+  fb.textContent=msg;fb.className=`feedback ${type}`;
+}
+
+// ─── HINT ─────────────────────────────────
+function giveHint(){
+  const q=queue[qIdx];
+  const nextCorrect=q.words[placed.length];
+  if(!nextCorrect)return;
+  hintsUsed++;
+  const hb=document.getElementById('btn-hint');
+  hb.disabled=true;hb.textContent='💡 Used';
+  showFeedback(`💡 Next word starts with "${nextCorrect[0]}" — it's "${nextCorrect}"`, 'hint-msg');
+  // highlight it in the bank
+  document.querySelectorAll('.bank-token').forEach(el=>{
+    if(el.textContent===nextCorrect&&!el.dataset.highlighted){
+      el.dataset.highlighted='1';
+      el.style.background='#ffe066';el.style.borderColor='#d4a800';
+      setTimeout(()=>{el.style.background='';el.style.borderColor='';delete el.dataset.highlighted;},2000);
+    }
+  });
+  showToast(`💡 Look for "${nextCorrect}"`);
+}
+
+// ─── END ──────────────────────────────────
+function showEnd(){
+  clearInterval(timerInterval);
+  const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');
+  const maxScore=queue.length*2;
+  const pct=Math.round((score/maxScore)*100);
+
+  // hide game elements
+  document.querySelectorAll('.q-progress,.context-chip,.translation-hint,.drop-zone-label,.drop-zone,.bank-label,.word-bank,.btn-row,.feedback').forEach(el=>el.style.display='none');
+
+  let emoji='🎉',title='Excellent work!';
+  if(pct<50){emoji='💪';title='Keep practising!';}
+  else if(pct<80){emoji='👍';title='Good effort!';}
+
+  document.getElementById('end-emoji').textContent=emoji;
+  document.getElementById('end-title').textContent=title;
+  document.getElementById('end-score').textContent=`${score} / ${maxScore} pts`;
+  document.getElementById('end-sub').textContent=`${queue.length} sentences · ${m}:${s} · ${pct}%`;
+  document.getElementById('end-screen').classList.add('show');
+  playWin();
+}
+
+// ─── SOUNDS ───────────────────────────────
+const AC=new(window.AudioContext||window.webkitAudioContext)();
+document.addEventListener('pointerdown',()=>{if(AC.state==='suspended')AC.resume();},{once:true});
+
+function playCorrect(){
+  const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);
+  o.type='sine';
+  o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(880,t+0.13);o.frequency.exponentialRampToValueAtTime(660,t+0.24);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.38,t+0.04);g.gain.exponentialRampToValueAtTime(0.001,t+0.36);
+  o.start(t);o.stop(t+0.37);
+  const o2=AC.createOscillator(),g2=AC.createGain();
+  o2.connect(g2);g2.connect(AC.destination);
+  o2.type='triangle';o2.frequency.setValueAtTime(1320,t+0.1);o2.frequency.exponentialRampToValueAtTime(1760,t+0.21);
+  g2.gain.setValueAtTime(0,t+0.1);g2.gain.linearRampToValueAtTime(0.16,t+0.13);g2.gain.exponentialRampToValueAtTime(0.001,t+0.29);
+  o2.start(t+0.1);o2.stop(t+0.31);
+}
+
+function playWrong(){
+  const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);
+  o.type='sawtooth';
+  o.frequency.setValueAtTime(260,t);o.frequency.exponentialRampToValueAtTime(90,t+0.36);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.26,t+0.04);g.gain.exponentialRampToValueAtTime(0.001,t+0.44);
+  o.start(t);o.stop(t+0.45);
+}
+
+function playWin(){
+  [523,659,784,1047,1319].forEach((freq,i)=>{
+    const t=AC.currentTime+i*0.09;
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.28,t+0.03);g.gain.exponentialRampToValueAtTime(0.001,t+0.33);
+    o.start(t);o.stop(t+0.35);
+  });
+}
+
+// ─── LEVEL / TOAST ────────────────────────
+function setLevel(level){
+  currentLevel=level;
+  document.getElementById('btn-a1').classList.toggle('active',level==='a1');
+  document.getElementById('btn-a2').classList.toggle('active',level==='a2');
+  document.body.classList.toggle('mode-a1',level==='a1');
+  document.body.classList.toggle('mode-a2',level==='a2');
+  startGame();
+}
+
+let toastTO;
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTO);toastTO=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+startGame();
+</script>
+</body>
+</html>
