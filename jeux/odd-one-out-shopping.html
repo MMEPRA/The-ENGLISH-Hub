@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odd One Out · Let's Go Shopping!</title>
+<style>
+:root{
+  --bg:#f0f4ff;--card:#ffffff;
+  --indigo:#4f46e5;--indigo-light:#818cf8;--indigo-pale:#eef2ff;--indigo-dark:#3730a3;
+  --green:#22c55e;--green-light:#dcfce7;--green-dark:#15803d;
+  --red:#ef4444;--red-light:#fee2e2;--red-dark:#b91c1c;
+  --amber:#f59e0b;--amber-light:#fef3c7;--amber-dark:#b45309;
+  --purple:#a855f7;--purple-light:#f3e8ff;
+  --text:#1e1b4b;--text2:#6366f1;--text3:#a5b4fc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);min-height:100vh;padding:1.2rem 1rem 3rem;position:relative;overflow-x:hidden;}
+
+/* subtle dot grid bg */
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c7d2fe 1px,transparent 1px);background-size:28px 28px;opacity:.45;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;}
+
+/* ── HEADER ── */
+.header{text-align:center;margin-bottom:1.1rem;}
+.unit-tag{display:inline-block;background:var(--indigo);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.28rem .9rem;border-radius:999px;margin-bottom:.45rem;}
+h1{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:900;color:var(--indigo-dark);letter-spacing:-.02em;}
+h1 span{color:var(--indigo-light);}
+.subtitle{font-size:.86rem;color:var(--text2);margin-top:.2rem;}
+.ccf-badge{display:inline-flex;align-items:center;gap:.25rem;background:var(--purple);color:#fff;font-size:.63rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.18rem .65rem;border-radius:999px;margin-left:.35rem;vertical-align:middle;}
+
+/* ── LEVEL ── */
+.level-bar{display:flex;gap:.6rem;justify-content:center;margin-bottom:1.1rem;flex-wrap:wrap;}
+.level-btn{padding:.48rem 1.25rem;border-radius:999px;border:2px solid var(--indigo-light);background:#fff;color:var(--indigo);font-family:inherit;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.level-btn.active{background:var(--indigo);color:#fff;border-color:var(--indigo);box-shadow:0 4px 14px rgba(79,70,229,.33);transform:translateY(-1px);}
+.level-btn:hover:not(.active){background:var(--indigo-pale);}
+
+/* ── STATS ── */
+.stats-row{display:flex;justify-content:center;gap:.9rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.stat-chip{background:#fff;border:2px solid #c7d2fe;border-radius:999px;padding:.28rem .85rem;font-size:.8rem;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:.28rem;}
+.lives-wrap{display:flex;gap:3px;}
+.life{font-size:.95rem;transition:opacity .3s;}
+.life.lost{opacity:.15;filter:grayscale(1);}
+
+/* ── A1 HELPER ── */
+.a1-helper{display:none;background:#eef2ff;border:2px solid var(--indigo-light);border-radius:13px;padding:.65rem 1rem;margin-bottom:1rem;max-width:680px;margin-left:auto;margin-right:auto;font-size:.83rem;color:var(--indigo-dark);font-weight:600;text-align:center;}
+body.mode-a1 .a1-helper{display:block;}
+
+/* ── GAME CARD ── */
+.game-card{background:var(--card);border-radius:22px;padding:1.5rem 1.5rem 1.7rem;box-shadow:0 8px 32px rgba(79,70,229,.13);border:2px solid #c7d2fe;max-width:660px;margin:0 auto;}
+
+/* ── PROGRESS ── */
+.q-progress{display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;}
+.q-label{font-size:.75rem;font-weight:700;color:var(--text2);white-space:nowrap;}
+.q-bar-wrap{flex:1;background:var(--indigo-pale);border-radius:999px;height:8px;overflow:hidden;}
+.q-bar-fill{height:100%;background:linear-gradient(90deg,var(--indigo-light),var(--indigo));border-radius:999px;transition:width .5s ease;}
+.score-badge{background:var(--indigo-pale);color:var(--indigo-dark);font-size:.75rem;font-weight:700;padding:.22rem .75rem;border-radius:999px;white-space:nowrap;}
+
+/* ── CATEGORY CHIP ── */
+.cat-chip{display:inline-flex;align-items:center;gap:.45rem;border-radius:12px;padding:.42rem 1rem;font-size:.82rem;font-weight:700;margin-bottom:1.1rem;border:2px solid;}
+
+/* ── QUESTION ── */
+.question-label{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:.55rem;}
+.question-text{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:1.3rem;line-height:1.55;}
+body.mode-a1 .question-text{font-size:.95rem;}
+
+/* ── WORD CARDS ── */
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.2rem;}
+.word-card{background:var(--indigo-pale);border:2px solid #c7d2fe;border-radius:16px;padding:1rem .8rem;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s,border-color .18s;user-select:none;}
+.word-card:hover:not(.disabled){transform:translateY(-3px);box-shadow:0 6px 18px rgba(79,70,229,.18);border-color:var(--indigo-light);}
+.word-card:active:not(.disabled){transform:scale(.97);}
+.word-card.disabled{cursor:default;}
+.word-emoji{font-size:1.9rem;display:block;margin-bottom:.35rem;line-height:1;}
+.word-en{font-size:1.05rem;font-weight:800;color:var(--indigo-dark);}
+.word-fr{font-size:.74rem;color:var(--text2);font-weight:500;margin-top:.12rem;display:none;}
+body.mode-a1 .word-fr{display:block;}
+
+/* states */
+.word-card.correct{background:var(--green-light);border-color:var(--green);animation:popIn .35s cubic-bezier(.175,.885,.32,1.275);}
+.word-card.correct .word-en{color:var(--green-dark);}
+.word-card.wrong{background:var(--red-light);border-color:var(--red);animation:shake .35s ease;}
+.word-card.wrong .word-en{color:var(--red-dark);}
+.word-card.reveal{background:var(--green-light);border-color:var(--green);opacity:.7;}
+.word-card.reveal .word-en{color:var(--green-dark);}
+@keyframes popIn{0%{transform:scale(.88)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── EXPLANATION ── */
+.explanation{min-height:2.2rem;background:var(--indigo-pale);border-radius:12px;padding:.6rem 1rem;font-size:.87rem;color:var(--indigo-dark);font-weight:600;margin-bottom:1rem;line-height:1.5;opacity:0;transition:opacity .35s;}
+.explanation.show{opacity:1;}
+
+/* ── NEXT BTN ── */
+.btn-next{display:none;padding:.55rem 1.6rem;background:var(--indigo);color:#fff;border:none;border-radius:999px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(79,70,229,.33);transition:all .2s;margin:0 auto;display:none;}
+.btn-next.show{display:block;}
+.btn-next:hover{background:var(--indigo-dark);transform:translateY(-1px);}
+
+/* ── END SCREEN ── */
+.end-screen{display:none;text-align:center;padding:1.5rem .5rem;}
+.end-screen.show{display:block;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) both;}
+.end-emoji{font-size:3.2rem;margin-bottom:.4rem;}
+.end-title{font-size:1.5rem;font-weight:900;color:var(--indigo-dark);margin-bottom:.2rem;}
+.end-score{font-size:2.2rem;font-weight:900;color:var(--indigo);margin:.5rem 0;}
+.end-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.1rem;}
+.end-medals{display:flex;justify-content:center;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap;}
+.end-medal{background:var(--indigo-pale);border:2px solid #c7d2fe;border-radius:12px;padding:.4rem .9rem;font-size:.78rem;font-weight:700;color:var(--indigo-dark);}
+.btn-again{padding:.62rem 1.8rem;background:var(--indigo);color:#fff;border:none;border-radius:999px;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(79,70,229,.35);transition:all .2s;}
+.btn-again:hover{background:var(--indigo-dark);transform:translateY(-2px);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--indigo);color:#fff;padding:.62rem 1.5rem;border-radius:999px;font-weight:700;font-size:.9rem;transition:transform .35s cubic-bezier(.175,.885,.32,1.275);z-index:999;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body class="mode-a1">
+<div class="toast" id="toast"></div>
+<div class="wrap">
+
+<div class="header">
+  <div class="unit-tag">Unit 3 · Let's Go Shopping</div>
+  <h1>🔍 Odd <span>One Out</span></h1>
+  <p class="subtitle">Find the word that doesn't belong! <span class="ccf-badge">🎯 CCF Prep</span></p>
+</div>
+
+<div class="level-bar">
+  <button class="level-btn active" id="btn-a1" onclick="setLevel('a1')">🟢 A1 Starter <small style="font-weight:400;font-size:.73rem"> · avec aide</small></button>
+  <button class="level-btn" id="btn-a2" onclick="setLevel('a2')">🟡 A2 Challenge <small style="font-weight:400;font-size:.73rem"> · sans aide</small></button>
+</div>
+
+<div class="a1-helper">💡 <strong>How to play:</strong> Look at the 4 words. <strong>3 belong to the same category</strong>, 1 does not. Click the odd one out!</div>
+
+<div class="stats-row">
+  <div class="stat-chip">⏱ <span id="timer-display">00:00</span></div>
+  <div class="stat-chip">❤️ <div class="lives-wrap" id="lives-wrap"></div></div>
+  <div class="stat-chip">🎯 <span id="q-counter">1 / 1</span></div>
+</div>
+
+<div class="game-card" id="game-card">
+
+  <div class="q-progress">
+    <span class="q-label" id="q-label">Q 1</span>
+    <div class="q-bar-wrap"><div class="q-bar-fill" id="q-bar"></div></div>
+    <span class="score-badge">Score: <span id="score-val">0</span></span>
+  </div>
+
+  <!-- category chip -->
+  <div class="cat-chip" id="cat-chip">🏷️ Category</div>
+
+  <!-- question -->
+  <div class="question-label">Which word doesn't belong?</div>
+  <div class="question-text" id="question-text"></div>
+
+  <!-- 4 cards -->
+  <div class="cards-grid" id="cards-grid"></div>
+
+  <!-- explanation -->
+  <div class="explanation" id="explanation"></div>
+
+  <!-- next -->
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next question →</button>
+
+  <!-- end screen -->
+  <div class="end-screen" id="end-screen">
+    <div class="end-emoji" id="end-emoji">🎉</div>
+    <div class="end-title" id="end-title">Brilliant!</div>
+    <div class="end-score" id="end-score"></div>
+    <div class="end-medals" id="end-medals"></div>
+    <div class="end-sub" id="end-sub"></div>
+    <button class="btn-again" onclick="startGame()">🔄 New Game</button>
+  </div>
+
+</div>
+</div><!-- /wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════
+//  QUESTION POOL
+//  Each item: category, emoji colour theme, question (A1 / A2),
+//  4 words with emoji + fr, index of the odd one out, explanation
+// ═══════════════════════════════════════════════════
+const POOL = [
+
+  // ── CLOTHES ──
+  {
+    cat:'👗 Clothes', catColor:'#eef2ff', catBorder:'#818cf8', catText:'#3730a3',
+    q_a1:'Which word is NOT a piece of clothing?',
+    q_a2:'Spot the odd one out — clothing category.',
+    words:[
+      {en:'HOODIE',   emoji:'🧥', fr:'sweat à capuche'},
+      {en:'TRAINERS', emoji:'👟', fr:'baskets'},
+      {en:'RECEIPT',  emoji:'🧾', fr:'reçu'},
+      {en:'JOGGERS',  emoji:'👖', fr:'jogging'},
+    ],
+    odd:2,
+    explain_a1:'"Receipt" (reçu) is NOT clothing — it\'s a document you get after paying. The others are all clothes!',
+    explain_a2:'"Receipt" is a payment document, not an item of clothing. HOODIE, TRAINERS and JOGGERS all belong to the clothes category.',
+    level:'a1'
+  },
+  {
+    cat:'👗 Clothes', catColor:'#eef2ff', catBorder:'#818cf8', catText:'#3730a3',
+    q_a1:'Which word is NOT a piece of clothing?',
+    q_a2:'Find the word that does not belong.',
+    words:[
+      {en:'TRACKSUIT', emoji:'🏃', fr:'survêtement'},
+      {en:'BELT',      emoji:'👔', fr:'ceinture'},
+      {en:'BARBER',    emoji:'✂️', fr:'coiffeur'},
+      {en:'BEANIE',    emoji:'🧢', fr:'bonnet'},
+    ],
+    odd:2,
+    explain_a1:'"Barber" (coiffeur) is a person, not clothing. TRACKSUIT, BELT and BEANIE are all things you wear!',
+    explain_a2:'"Barber" is a profession (a hairdresser for men), while the others are all garments or accessories.',
+    level:'a1'
+  },
+  {
+    cat:'👗 Clothes', catColor:'#eef2ff', catBorder:'#818cf8', catText:'#3730a3',
+    q_a1:'Three words are clothes. Which one is NOT?',
+    q_a2:'Which word does not belong in the clothes group?',
+    words:[
+      {en:'SWEATSHIRT', emoji:'👕', fr:'sweat-shirt'},
+      {en:'DISCOUNT',   emoji:'🔖', fr:'réduction'},
+      {en:'TROUSERS',   emoji:'👖', fr:'pantalon'},
+      {en:'JACKET',     emoji:'🧥', fr:'veste'},
+    ],
+    odd:1,
+    explain_a1:'"Discount" (réduction) is about money and prices, not clothing. The others are garments!',
+    explain_a2:'"Discount" belongs to the shopping/payment category. SWEATSHIRT, TROUSERS and JACKET are all items you wear.',
+    level:'a1'
+  },
+  {
+    cat:'👗 Clothes', catColor:'#eef2ff', catBorder:'#818cf8', catText:'#3730a3',
+    q_a1:'Find the word that is NOT clothing.',
+    q_a2:'Which word is the odd one out?',
+    words:[
+      {en:'SNAPBACK',    emoji:'🧢', fr:'casquette'},
+      {en:'SUNGLASSES',  emoji:'🕶️', fr:'lunettes de soleil'},
+      {en:'CHECKOUT',    emoji:'🛒', fr:'caisse'},
+      {en:'SOCKS',       emoji:'🧦', fr:'chaussettes'},
+    ],
+    odd:2,
+    explain_a1:'"Checkout" (caisse) is where you pay — not something you wear. SNAPBACK, SUNGLASSES and SOCKS are all accessories!',
+    explain_a2:'"Checkout" is part of the shop layout. The others are all fashion accessories.',
+    level:'a1'
+  },
+
+  // ── PAYMENT ──
+  {
+    cat:'💳 Payment', catColor:'#f0fdf4', catBorder:'#4ade80', catText:'#166534',
+    q_a1:'Which word is NOT about paying?',
+    q_a2:'Find the odd one out in the payment category.',
+    words:[
+      {en:'CASH',    emoji:'💵', fr:'espèces'},
+      {en:'REFUND',  emoji:'↩️', fr:'remboursement'},
+      {en:'POUND',   emoji:'💷', fr:'livre sterling'},
+      {en:'FITTING', emoji:'🪞', fr:'essayage'},
+    ],
+    odd:3,
+    explain_a1:'"Fitting" (essayage) is what you do in a changing room — it\'s not about money! CASH, REFUND and POUND are all payment words.',
+    explain_a2:'"Fitting" relates to trying on clothes, not to payment. The others all belong to the payment/money lexical field.',
+    level:'a1'
+  },
+  {
+    cat:'💳 Payment', catColor:'#f0fdf4', catBorder:'#4ade80', catText:'#166534',
+    q_a1:'Which word does NOT relate to money or payment?',
+    q_a2:'Spot the intruder in this payment set.',
+    words:[
+      {en:'PRICE',   emoji:'🏷️', fr:'prix'},
+      {en:'CHANGE',  emoji:'🪙', fr:'monnaie'},
+      {en:'LOOSE',   emoji:'💨', fr:'ample'},
+      {en:'RECEIPT', emoji:'🧾', fr:'reçu'},
+    ],
+    odd:2,
+    explain_a1:'"Loose" describes how a piece of clothing fits (ample) — nothing to do with money! PRICE, CHANGE and RECEIPT are all payment words.',
+    explain_a2:'"Loose" is an adjective describing fit. PRICE, CHANGE and RECEIPT all belong to the payment lexical field.',
+    level:'a1'
+  },
+  {
+    cat:'💳 Payment', catColor:'#f0fdf4', catBorder:'#4ade80', catText:'#166534',
+    q_a1:'Three words are about money. Which is NOT?',
+    q_a2:'Find the word that doesn\'t fit the payment theme.',
+    words:[
+      {en:'DISCOUNT',  emoji:'🔖', fr:'réduction'},
+      {en:'BUDGET',    emoji:'💰', fr:'budget'},
+      {en:'TOPPING',   emoji:'🍫', fr:'nappage'},
+      {en:'EXPENSIVE', emoji:'💎', fr:'cher'},
+    ],
+    odd:2,
+    explain_a1:'"Topping" (nappage) is something you put on ice cream — not a money word! The others are all about prices and money.',
+    explain_a2:'"Topping" belongs to the food/ice cream lexical set. DISCOUNT, BUDGET and EXPENSIVE all relate to prices and money.',
+    level:'a2'
+  },
+
+  // ── FIT & SIZE ──
+  {
+    cat:'📐 Fit & Size', catColor:'#fef3c7', catBorder:'#f59e0b', catText:'#78350f',
+    q_a1:'Which word does NOT describe how clothes fit?',
+    q_a2:'Find the word that doesn\'t describe fit or size.',
+    words:[
+      {en:'TIGHT',  emoji:'🤏', fr:'serré'},
+      {en:'LOOSE',  emoji:'💨', fr:'ample'},
+      {en:'CASH',   emoji:'💵', fr:'espèces'},
+      {en:'PERFECT',emoji:'✅', fr:'parfait'},
+    ],
+    odd:2,
+    explain_a1:'"Cash" (espèces) is money — it doesn\'t describe how clothes fit! TIGHT, LOOSE and PERFECT all describe the fit of clothing.',
+    explain_a2:'"Cash" belongs to the payment category. TIGHT, LOOSE and PERFECT are all adjectives used to describe how a garment fits.',
+    level:'a1'
+  },
+  {
+    cat:'📐 Fit & Size', catColor:'#fef3c7', catBorder:'#f59e0b', catText:'#78350f',
+    q_a1:'Which word is NOT about how clothes fit or feel?',
+    q_a2:'Spot the odd one out — fit and size category.',
+    words:[
+      {en:'SOFT',     emoji:'🌸', fr:'doux'},
+      {en:'HARD',     emoji:'🪨', fr:'dur'},
+      {en:'MASSIVE',  emoji:'🐘', fr:'énorme'},
+      {en:'EARBUDS',  emoji:'🎧', fr:'écouteurs'},
+    ],
+    odd:3,
+    explain_a1:'"Earbuds" (écouteurs) are tech accessories — not words about fit! SOFT, HARD and MASSIVE can all describe textures or sizes.',
+    explain_a2:'"Earbuds" are electronic accessories. SOFT, HARD and MASSIVE are all adjectives that can describe physical qualities of clothing.',
+    level:'a2'
+  },
+
+  // ── TECH / ACCESSORIES ──
+  {
+    cat:'📱 Tech & Accessories', catColor:'#f3e8ff', catBorder:'#a855f7', catText:'#6b21a8',
+    q_a1:'Which word is NOT a tech accessory?',
+    q_a2:'Find the odd one out — tech accessories.',
+    words:[
+      {en:'EARBUDS',  emoji:'🎧', fr:'écouteurs'},
+      {en:'CHARGER',  emoji:'🔌', fr:'chargeur'},
+      {en:'CONSOLE',  emoji:'🎮', fr:'console'},
+      {en:'REFUND',   emoji:'↩️', fr:'remboursement'},
+    ],
+    odd:3,
+    explain_a1:'"Refund" (remboursement) is about getting money back — not a gadget! EARBUDS, CHARGER and CONSOLE are all tech products.',
+    explain_a2:'"Refund" is a payment/service concept. EARBUDS, CHARGER and CONSOLE are all technology-related items you can buy.',
+    level:'a2'
+  },
+  {
+    cat:'📱 Tech & Accessories', catColor:'#f3e8ff', catBorder:'#a855f7', catText:'#6b21a8',
+    q_a1:'Three words are tech or accessories. Which is NOT?',
+    q_a2:'Which word doesn\'t belong to the tech/accessories group?',
+    words:[
+      {en:'CHARGER',   emoji:'🔌', fr:'chargeur'},
+      {en:'SNAPBACK',  emoji:'🧢', fr:'casquette'},
+      {en:'EARBUDS',   emoji:'🎧', fr:'écouteurs'},
+      {en:'CONSOLE',   emoji:'🎮', fr:'console'},
+    ],
+    odd:1,
+    explain_a1:'"Snapback" (casquette) is a fashion item, not a tech gadget! CHARGER, EARBUDS and CONSOLE are all technology.',
+    explain_a2:'"Snapback" is a clothing accessory. CHARGER, EARBUDS and CONSOLE are all electronic/tech products.',
+    level:'a2'
+  },
+
+  // ── IN-STORE ACTIONS ──
+  {
+    cat:'🛒 Shop Actions', catColor:'#fce7f3', catBorder:'#ec4899', catText:'#831843',
+    q_a1:'Which word is NOT an action you do in a shop?',
+    q_a2:'Find the odd one out — things you do in a shop.',
+    words:[
+      {en:'LOOKING',  emoji:'👀', fr:'regarder'},
+      {en:'TRYING',   emoji:'🤞', fr:'essayer'},
+      {en:'FITTING',  emoji:'🪞', fr:'essayage'},
+      {en:'POUND',    emoji:'💷', fr:'livre sterling'},
+    ],
+    odd:3,
+    explain_a1:'"Pound" (livre sterling) is British money — it\'s not an action! LOOKING, TRYING and FITTING are all things you do when shopping.',
+    explain_a2:'"Pound" is a unit of currency. LOOKING, TRYING and FITTING all describe active processes involved in shopping.',
+    level:'a1'
+  },
+  {
+    cat:'🛒 Shop Actions', catColor:'#fce7f3', catBorder:'#ec4899', catText:'#831843',
+    q_a1:'Which word is NOT something you do in a shop?',
+    q_a2:'Spot the word that doesn\'t describe a shopping action.',
+    words:[
+      {en:'TRYING',   emoji:'🤞', fr:'essayer'},
+      {en:'ENDLESS',  emoji:'♾️', fr:'interminable'},
+      {en:'LOOKING',  emoji:'👀', fr:'regarder'},
+      {en:'FITTING',  emoji:'🪞', fr:'essayage'},
+    ],
+    odd:1,
+    explain_a1:'"Endless" (interminable) is an adjective — it describes a feeling, not an action! TRYING, LOOKING and FITTING are all actions.',
+    explain_a2:'"Endless" is a descriptive adjective (e.g. "endless choice"). TRYING, LOOKING and FITTING are all gerunds describing shopping actions.',
+    level:'a2'
+  },
+
+  // ── ICE CREAM / FOOD ──
+  {
+    cat:'🍦 Ice Cream & Food', catColor:'#fff7ed', catBorder:'#fb923c', catText:'#7c2d12',
+    q_a1:'Which word is NOT about ice cream or food?',
+    q_a2:'Find the word that doesn\'t belong in the ice cream/food category.',
+    words:[
+      {en:'FLAVOUR',  emoji:'✨', fr:'parfum'},
+      {en:'SCOOP',    emoji:'🍨', fr:'boule'},
+      {en:'TOPPING',  emoji:'🍫', fr:'nappage'},
+      {en:'SECTION',  emoji:'🗂️', fr:'rayon'},
+    ],
+    odd:3,
+    explain_a1:'"Section" (rayon) is part of a shop — not ice cream! FLAVOUR, SCOOP and TOPPING are all about ice cream.',
+    explain_a2:'"Section" refers to an area of a shop. FLAVOUR, SCOOP and TOPPING all belong to the ice cream / food service lexical set.',
+    level:'a1'
+  },
+  {
+    cat:'🍦 Ice Cream & Food', catColor:'#fff7ed', catBorder:'#fb923c', catText:'#7c2d12',
+    q_a1:'Which word is NOT related to ice cream?',
+    q_a2:'Spot the odd one out in the ice cream category.',
+    words:[
+      {en:'CONE',     emoji:'🍦', fr:'cornet'},
+      {en:'VANILLA',  emoji:'🌿', fr:'vanille'},
+      {en:'BARBER',   emoji:'✂️', fr:'coiffeur'},
+      {en:'SCOOP',    emoji:'🍨', fr:'boule'},
+    ],
+    odd:2,
+    explain_a1:'"Barber" (coiffeur) cuts hair — nothing to do with ice cream! CONE, VANILLA and SCOOP are all ice cream words.',
+    explain_a2:'"Barber" is a profession. CONE, VANILLA and SCOOP all relate to buying or serving ice cream.',
+    level:'a1'
+  },
+
+  // ── SHOP LAYOUT ──
+  {
+    cat:'🏪 Shop & Place', catColor:'#ecfdf5', catBorder:'#34d399', catText:'#064e3b',
+    q_a1:'Which word is NOT about a shop or place?',
+    q_a2:'Find the odd one out — shop layout vocabulary.',
+    words:[
+      {en:'CHECKOUT', emoji:'🛒', fr:'caisse'},
+      {en:'SECTION',  emoji:'🗂️', fr:'rayon'},
+      {en:'TIGHT',    emoji:'🤏', fr:'serré'},
+      {en:'SOUVENIR', emoji:'🗽', fr:'souvenir'},
+    ],
+    odd:2,
+    explain_a1:'"Tight" (serré) describes how clothes fit — not a place in a shop! CHECKOUT, SECTION and SOUVENIR are all shop-related words.',
+    explain_a2:'"Tight" is an adjective describing fit. CHECKOUT, SECTION and SOUVENIR all relate to places or items found in a shop.',
+    level:'a2'
+  },
+  {
+    cat:'🏪 Shop & Place', catColor:'#ecfdf5', catBorder:'#34d399', catText:'#064e3b',
+    q_a1:'Which word does NOT relate to a shop or shopping place?',
+    q_a2:'Find the word that doesn\'t describe a shop concept.',
+    words:[
+      {en:'CHECKOUT',  emoji:'🛒', fr:'caisse'},
+      {en:'SECTION',   emoji:'🗂️', fr:'rayon'},
+      {en:'MASSIVE',   emoji:'🐘', fr:'énorme'},
+      {en:'SOUVENIR',  emoji:'🗽', fr:'souvenir'},
+    ],
+    odd:2,
+    explain_a1:'"Massive" (énorme) is an adjective describing size — not a shop word! CHECKOUT, SECTION and SOUVENIR are all related to shops.',
+    explain_a2:'"Massive" is a size adjective. CHECKOUT, SECTION and SOUVENIR all relate to retail spaces and shopping.',
+    level:'a2'
+  },
+];
+
+// ── CONFIG ────────────────────────────────
+const PICK = 10;
+const MAX_LIVES = 3;
+let currentLevel='a1', queue=[], qIdx=0, score=0, lives=MAX_LIVES;
+let answered=false, timerInterval=null, seconds=0;
+let correctStreak=0, wrongCount=0;
+
+// ── UTILS ─────────────────────────────────
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pickRandom(arr,n){return shuffle(arr).slice(0,Math.min(n,arr.length));}
+
+// ── START ─────────────────────────────────
+function startGame(){
+  const pool = currentLevel==='a1'
+    ? POOL.filter(q=>q.level==='a1')
+    : POOL;
+  queue = pickRandom(pool, PICK);
+  qIdx=0; score=0; lives=MAX_LIVES; seconds=0; correctStreak=0; wrongCount=0;
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    seconds++;
+    const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+  },1000);
+  document.getElementById('end-screen').classList.remove('show');
+  showGameUI(true);
+  renderLives();
+  loadQuestion();
+}
+
+function showGameUI(show){
+  ['cat-chip','question-label','question-text','cards-grid','explanation'].forEach(id=>{
+    document.getElementById(id).style.display=show?'':'none';
+  });
+}
+
+function renderLives(){
+  const el=document.getElementById('lives-wrap'); el.innerHTML='';
+  for(let i=0;i<MAX_LIVES;i++){
+    const sp=document.createElement('span');
+    sp.className='life'+(i>=lives?' lost':'');
+    sp.textContent='❤️'; el.appendChild(sp);
+  }
+}
+
+// ── LOAD QUESTION ─────────────────────────
+function loadQuestion(){
+  if(qIdx>=queue.length){showEnd();return;}
+  const q=queue[qIdx];
+  answered=false;
+
+  document.getElementById('q-label').textContent=`Q ${qIdx+1}`;
+  document.getElementById('q-counter').textContent=`${qIdx+1} / ${queue.length}`;
+  document.getElementById('q-bar').style.width=`${(qIdx/queue.length)*100}%`;
+  document.getElementById('score-val').textContent=score;
+
+  // cat chip
+  const cc=document.getElementById('cat-chip');
+  cc.textContent=q.cat;
+  cc.style.background=q.catColor;
+  cc.style.borderColor=q.catBorder;
+  cc.style.color=q.catText;
+
+  // question
+  document.getElementById('question-text').textContent=
+    currentLevel==='a1' ? q.q_a1 : q.q_a2;
+
+  // explanation clear
+  const expl=document.getElementById('explanation');
+  expl.textContent=''; expl.classList.remove('show');
+
+  // next btn
+  const nb=document.getElementById('btn-next');
+  nb.classList.remove('show');
+
+  // render cards (shuffled display order, but keep odd index tracked)
+  renderCards(q);
+}
+
+function renderCards(q){
+  const grid=document.getElementById('cards-grid');
+  grid.innerHTML='';
+  // create array of indices 0-3, shuffle for display
+  const order=shuffle([0,1,2,3]);
+  order.forEach(i=>{
+    const w=q.words[i];
+    const card=document.createElement('div');
+    card.className='word-card';
+    card.dataset.idx=i;
+    card.innerHTML=`<span class="word-emoji">${w.emoji}</span><div class="word-en">${w.en}</div><div class="word-fr">${w.fr}</div>`;
+    card.addEventListener('click',()=>onCardClick(i,q));
+    grid.appendChild(card);
+  });
+}
+
+// ── ANSWER ────────────────────────────────
+function onCardClick(idx, q){
+  if(answered) return;
+  answered=true;
+
+  const cards=[...document.querySelectorAll('.word-card')];
+  cards.forEach(c=>c.classList.add('disabled'));
+
+  if(idx===q.odd){
+    // CORRECT
+    playCorrect(); correctStreak++;
+    score+=2;
+    document.getElementById('score-val').textContent=score;
+    cards.forEach(c=>{
+      if(+c.dataset.idx===idx) c.classList.add('correct');
+    });
+    showExplanation(currentLevel==='a1'?q.explain_a1:q.explain_a2,'correct');
+    showToast('✅ Well spotted!');
+  } else {
+    // WRONG
+    playWrong(); wrongCount++; lives--;
+    renderLives();
+    cards.forEach(c=>{
+      if(+c.dataset.idx===idx) c.classList.add('wrong');
+      if(+c.dataset.idx===q.odd) c.classList.add('reveal');
+    });
+    showExplanation(currentLevel==='a1'?q.explain_a1:q.explain_a2,'wrong');
+    showToast('❌ Not quite…');
+    if(lives<=0 && qIdx<queue.length-1){
+      // keep going with 1 life restored
+      setTimeout(()=>{lives=1;renderLives();},800);
+    }
+  }
+
+  // show next btn after short delay
+  setTimeout(()=>{
+    const nb=document.getElementById('btn-next');
+    nb.classList.add('show');
+    nb.textContent= qIdx<queue.length-1 ? 'Next question →' : 'See my results 🏆';
+  },900);
+}
+
+function showExplanation(text,type){
+  const el=document.getElementById('explanation');
+  el.textContent=(type==='correct'?'✅ ':'❌ ')+text;
+  el.style.background=type==='correct'?'#dcfce7':'#fee2e2';
+  el.style.color=type==='correct'?'#166534':'#b91c1c';
+  el.classList.add('show');
+}
+
+function nextQuestion(){
+  qIdx++;
+  document.getElementById('btn-next').classList.remove('show');
+  const expl=document.getElementById('explanation');
+  expl.classList.remove('show');
+  loadQuestion();
+}
+
+// ── END ───────────────────────────────────
+function showEnd(){
+  clearInterval(timerInterval);
+  showGameUI(false);
+  document.getElementById('btn-next').classList.remove('show');
+
+  const total=queue.length*2;
+  const pct=Math.round((score/total)*100);
+  const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');
+
+  let emoji='🎉',title='Excellent work!';
+  if(pct<40){emoji='💪';title='Keep practising!';}
+  else if(pct<65){emoji='👍';title='Good effort!';}
+  else if(pct<85){emoji='⭐';title='Well done!';}
+
+  document.getElementById('end-emoji').textContent=emoji;
+  document.getElementById('end-title').textContent=title;
+  document.getElementById('end-score').textContent=`${score} / ${total} pts`;
+  document.getElementById('end-sub').textContent=`${queue.length} questions · ${m}:${s} · ${pct}%`;
+
+  // medals
+  const medals=[];
+  if(wrongCount===0) medals.push('🏅 Perfect round!');
+  if(correctStreak>=5) medals.push('🔥 5+ correct streak');
+  if(pct>=80) medals.push('⭐ High scorer');
+  if(seconds<90) medals.push('⚡ Speed demon');
+  const medalsEl=document.getElementById('end-medals');
+  medalsEl.innerHTML=medals.map(m=>`<span class="end-medal">${m}</span>`).join('');
+
+  document.getElementById('end-screen').classList.add('show');
+  playWin();
+}
+
+// ── SOUNDS ────────────────────────────────
+const AC=new(window.AudioContext||window.webkitAudioContext)();
+document.addEventListener('pointerdown',()=>{if(AC.state==='suspended')AC.resume();},{once:true});
+
+function playCorrect(){
+  const t=AC.currentTime;
+  [[320,880,660,'sine',.38],[1320,1760,null,'triangle',.16,0.1]].forEach(([f1,f2,f3,type,gain,delay=0])=>{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type=type;
+    o.frequency.setValueAtTime(f1,t+delay);
+    o.frequency.exponentialRampToValueAtTime(f2,t+delay+.13);
+    if(f3) o.frequency.exponentialRampToValueAtTime(f3,t+delay+.24);
+    g.gain.setValueAtTime(0,t+delay);g.gain.linearRampToValueAtTime(gain,t+delay+.04);g.gain.exponentialRampToValueAtTime(.001,t+delay+.36);
+    o.start(t+delay);o.stop(t+delay+.37);
+  });
+}
+
+function playWrong(){
+  const t=AC.currentTime;
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.connect(g);g.connect(AC.destination);
+  o.type='sawtooth';
+  o.frequency.setValueAtTime(260,t);o.frequency.exponentialRampToValueAtTime(90,t+.36);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.25,t+.04);g.gain.exponentialRampToValueAtTime(.001,t+.44);
+  o.start(t);o.stop(t+.45);
+}
+
+function playWin(){
+  [523,659,784,1047,1319].forEach((freq,i)=>{
+    const t=AC.currentTime+i*.09;
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type='sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.28,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.33);
+    o.start(t);o.stop(t+.35);
+  });
+}
+
+// ── LEVEL / TOAST ─────────────────────────
+function setLevel(level){
+  currentLevel=level;
+  document.getElementById('btn-a1').classList.toggle('active',level==='a1');
+  document.getElementById('btn-a2').classList.toggle('active',level==='a2');
+  document.body.classList.toggle('mode-a1',level==='a1');
+  document.body.classList.toggle('mode-a2',level==='a2');
+  startGame();
+}
+
+let toastTO;
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTO);toastTO=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+startGame();
+</script>
+</body>
+</html>
