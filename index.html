@@ -438,7 +438,7 @@ function renderAudioSection(audios){
 
 // ── GAMES ──
 const gamesData={
-  cap:{U3:[{name:'Word Search',emoji:'🔍',meta:"Vocabulaire · Let's GO Shopping!",file:'jeux/wordsearch_u3_shopping.html'}]},
+  cap:{U3:[{name:'Word Search',emoji:'🔍',meta:"Vocabulaire · Let's GO Shopping!",file:'jeux/wordsearch_u3_shopping.html'},{name:'Sentence Snap',emoji:'⚡',meta:"Syntaxe · Let's GO Shopping!",file:'jeux/sentence-snap-shopping.html'}]},
   agora:{U5:[
     {name:'Whack-a-Word',emoji:'⚡',meta:'Vocabulaire · The Nomad Kitchen · 12 mots',file:'jeux/whack_a_word_nomad_kitchen.html'},
     {name:'Whack-a-Word HARD',emoji:'💥',meta:'Vocabulaire · mode difficile · sans indices',file:'jeux/whack_a_word_nomad_kitchen_hard.html'},
@@ -472,7 +472,7 @@ function renderMagazine(d,key){
     var hasAudio=s.audio&&s.audio.length>0;
     var hasGames=gamesData[key]&&gamesData[key][s.num]&&gamesData[key][s.num].length>0;
     var imgHtml=s.img?'<img loading="lazy" class="mag-img" src="'+s.img+'" alt="" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"><div class="mag-img-placeholder" style="display:none">'+s.emoji+'</div>':'<div class="mag-img-placeholder">'+s.emoji+'</div>';
-    var isNew=(key==='agora'&&s.num==='U5')||(key==='mbbe'&&s.num==='U6')||(key==='mrc'&&s.num==='U6')||(key==='bts'&&s.num==='U4');
+    var isNew=(key==='cap'&&s.num==='U3')||(key==='agora'&&s.num==='U5')||(key==='mbbe'&&s.num==='U6')||(key==='mrc'&&s.num==='U6')||(key==='bts'&&s.num==='U4');
     var tags=[];if(wsCount>0)tags.push('📄 '+wsCount);if(hasAudio)tags.push('🔊');if(hasGames)tags.push('🎮 '+gamesData[key][s.num].length);
     return'<div class="seq-magazine-item" onclick="openMagDetail(\''+d.title.replace(/'/g,"\\'")+'\','+i+')">'+imgHtml+(isNew?'<div class="new-badge">✨ New</div>':'')+'<div class="mag-body"><div class="mag-badge">'+s.num+'</div><div class="mag-title">'+s.title+'</div><div class="mag-desc">'+(s.desc?s.desc.substring(0,80)+(s.desc.length>80?'...':''):'')+'</div><div class="mag-footer"><span class="mag-ws-count">'+tags.join(' · ')+'</span><span class="mag-cta">Voir →</span></div></div></div>';
   }).join('')+'</div>';
